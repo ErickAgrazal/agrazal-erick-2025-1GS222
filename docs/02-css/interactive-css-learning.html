@@ -1,0 +1,3263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Interactivo - Aprende CSS de Forma Visual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #a855f7;
+            --primary-dark: #9333ea;
+            --secondary: #3b82f6;
+            --accent: #14b8a6;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --success: #22c55e;
+            --warning: #eab308;
+            --error: #ef4444;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--gradient-1);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+        
+        header {
+            background: var(--gradient-2);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); }
+            to { text-shadow: 2px 2px 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(168, 85, 247, 0.5); }
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .tabs {
+            display: flex;
+            background: var(--light);
+            padding: 10px 20px;
+            gap: 10px;
+            overflow-x: auto;
+            border-bottom: 2px solid #e2e8f0;
+            scrollbar-width: thin;
+        }
+        
+        .tabs::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .tabs::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .tabs::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-size: 0.95em;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-2);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+        
+        .tab:hover::before {
+            left: 0;
+        }
+        
+        .tab:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+        }
+        
+        .content-area {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(10px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        @media (max-width: 1024px) {
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .code-editor {
+            background: #1e293b;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .editor-header {
+            background: #334155;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .editor-header span {
+            margin-left: 10px;
+            color: #94a3b8;
+            font-size: 0.9em;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .dot.red { background: #ef4444; }
+        .dot.yellow { background: #f59e0b; }
+        .dot.green { background: #10b981; }
+        
+        .code-area {
+            padding: 20px;
+            color: #e2e8f0;
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+            font-size: 14px;
+            min-height: 400px;
+            max-height: 600px;
+            overflow-y: auto;
+            outline: none;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+        
+        .preview {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            min-height: 400px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: auto;
+        }
+        
+        .preview-header {
+            background: var(--light);
+            margin: -20px -20px 20px -20px;
+            padding: 15px 20px;
+            border-bottom: 2px solid #e2e8f0;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(59, 130, 246, 0.1));
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .info-box h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(20, 184, 166, 0.1));
+            border-left: 4px solid var(--success);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .tip h3 {
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(245, 158, 11, 0.1));
+            border-left: 4px solid var(--warning);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h3 {
+            color: var(--warning);
+            margin-bottom: 10px;
+        }
+        
+        .exercise {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(236, 72, 153, 0.1));
+            border: 2px dashed var(--warning);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+        
+        .exercise h3 {
+            color: var(--warning);
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        button.run-btn {
+            background: var(--gradient-3);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            font-size: 1em;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button.run-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        button.run-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        button.run-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
+        }
+        
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .property-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .property-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient-2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .property-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .property-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .property-card code {
+            background: var(--light);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--secondary);
+        }
+        
+        .interactive-element {
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.5), rgba(253, 230, 138, 0.5));
+            border: 2px solid #f59e0b;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .interactive-element::before {
+            content: "🎮 Interactivo";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: white;
+            padding: 0 10px;
+            color: #f59e0b;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .color-palette {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .color-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .color-box:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .animation-demo {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-2);
+            border-radius: 12px;
+            margin: 20px auto;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+        }
+        
+        .flex-container {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            margin: 20px 0;
+            min-height: 150px;
+        }
+        
+        .flex-item {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 20px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .grid-item {
+            background: var(--secondary);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        /* CSS específico para las demos */
+        .css-demo-box {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        /* Control de inputs interactivos */
+        .control-panel {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+        }
+        
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .control-group input[type="range"],
+        .control-group input[type="color"],
+        .control-group select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .control-group input[type="range"] {
+            -webkit-appearance: none;
+            height: 8px;
+            background: #e2e8f0;
+            outline: none;
+        }
+        
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        
+        /* Estilos adicionales para hacer el documento más atractivo */
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 2em;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-2);
+            border-radius: 2px;
+        }
+        
+        h3 {
+            color: var(--primary-dark);
+            margin: 20px 0 15px 0;
+            font-size: 1.4em;
+        }
+        
+        /* Scrollbar personalizado */
+        .code-area::-webkit-scrollbar,
+        .preview::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        .code-area::-webkit-scrollbar-track {
+            background: #334155;
+        }
+        
+        .preview::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .code-area::-webkit-scrollbar-thumb,
+        .preview::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        
+        .code-area::-webkit-scrollbar-thumb:hover,
+        .preview::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 CSS Interactivo</h1>
+            <p>Domina CSS con ejemplos visuales - Modifica los estilos y observa los cambios en tiempo real</p>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showSection('basics')">🎯 Fundamentos</button>
+            <button class="tab" onclick="showSection('selectors')">🎲 Selectores</button>
+            <button class="tab" onclick="showSection('box-model')">📦 Box Model</button>
+            <button class="tab" onclick="showSection('colors')">🎨 Colores y Fondos</button>
+            <button class="tab" onclick="showSection('typography')">✏️ Tipografía</button>
+            <button class="tab" onclick="showSection('layout')">🏗️ Layout y Posición</button>
+            <button class="tab" onclick="showSection('flexbox')">💪 Flexbox</button>
+            <button class="tab" onclick="showSection('grid')">🔲 CSS Grid</button>
+            <button class="tab" onclick="showSection('animations')">🎬 Animaciones</button>
+            <button class="tab" onclick="showSection('responsive')">📱 Diseño Responsivo</button>
+            <button class="tab" onclick="showSection('advanced')">🚀 CSS Avanzado</button>
+        </div>
+        
+        <div class="content-area">
+            <!-- Fundamentos de CSS -->
+            <div class="section active" id="basics">
+                <h2>🎯 Fundamentos de CSS</h2>
+                
+                <div class="info-box">
+                    <h3>💡 ¿Qué es CSS?</h3>
+                    <p>CSS (Cascading Style Sheets) es el lenguaje que usamos para dar estilo y diseño a las páginas web. Controla colores, fuentes, espaciado, diseño y mucho más.</p>
+                </div>
+                
+                <h3>Sintaxis Básica de CSS</h3>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span>styles.css</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="basics-css">/* Regla CSS básica */
+h1 {
+    color: #a855f7;
+    font-size: 2.5em;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Múltiples propiedades */
+.caja {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    margin: 20px 0;
+    transition: transform 0.3s ease;
+}
+
+.caja:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Párrafos estilizados */
+p {
+    font-family: 'Georgia', serif;
+    line-height: 1.8;
+    color: #334155;
+    margin-bottom: 15px;
+}
+
+/* Botón moderno */
+.boton {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.boton:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+}</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="basics-preview">
+                            <h1>Título con Estilo</h1>
+                            <div class="caja">
+                                <h3>Caja con Gradiente</h3>
+                                <p>Esta caja tiene un fondo gradiente, esquinas redondeadas y una sombra. ¡Pasa el mouse sobre ella para ver el efecto hover!</p>
+                            </div>
+                            <p>Este es un párrafo con estilos personalizados. Nota cómo el espaciado entre líneas y el tipo de fuente hacen que sea más fácil de leer.</p>
+                            <button class="boton">Botón Estilizado</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="applyCSS('basics')">▶️ Aplicar Estilos</button>
+                
+                <div class="property-grid">
+                    <div class="property-card">
+                        <h4>color</h4>
+                        <p>Define el color del texto</p>
+                        <code>color: #a855f7;</code>
+                    </div>
+                    <div class="property-card">
+                        <h4>background</h4>
+                        <p>Establece el fondo del elemento</p>
+                        <code>background: linear-gradient(...);</code>
+                    </div>
+                    <div class="property-card">
+                        <h4>padding</h4>
+                        <p>Espacio interno del elemento</p>
+                        <code>padding: 20px;</code>
+                    </div>
+                    <div class="property-card">
+                        <h4>margin</h4>
+                        <p>Espacio externo del elemento</p>
+                        <code>margin: 10px;</code>
+                    </div>
+                </div>
+                
+                <div class="exercise">
+                    <h3>🎯 Ejercicio</h3>
+                    <p>Modifica el código CSS para:</p>
+                    <ul>
+                        <li>Cambiar el color del h1 a tu color favorito</li>
+                        <li>Modificar el gradiente de la caja</li>
+                        <li>Ajustar el tamaño del padding del botón</li>
+                        <li>Añadir una nueva clase con tus propios estilos</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Selectores -->
+            <div class="section" id="selectors">
+                <h2>🎲 Selectores CSS</h2>
+                
+                <div class="info-box">
+                    <h3>🎯 Tipos de Selectores</h3>
+                    <p>Los selectores determinan a qué elementos HTML se aplicarán los estilos. CSS ofrece múltiples formas de seleccionar elementos.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span>selectores.css</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="selectors-css">/* Selector de elemento */
+p {
+    color: #475569;
+}
+
+/* Selector de clase */
+.destacado {
+    background-color: #fef3c7;
+    padding: 10px;
+    border-left: 4px solid #f59e0b;
+}
+
+/* Selector de ID */
+#unico {
+    background: #ddd6fe;
+    padding: 15px;
+    border: 2px solid #a78bfa;
+    border-radius: 8px;
+}
+
+/* Selector de atributo */
+a[target="_blank"] {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a[target="_blank"]:after {
+    content: " ↗";
+}
+
+/* Selector descendiente */
+.contenedor p {
+    margin-left: 20px;
+    color: #6366f1;
+}
+
+/* Selector hijo directo */
+.lista > li {
+    background: #f0f9ff;
+    margin: 5px 0;
+    padding: 10px;
+    list-style: none;
+}
+
+/* Selector de hermano adyacente */
+h3 + p {
+    font-size: 1.1em;
+    color: #059669;
+    font-weight: 500;
+}
+
+/* Selector de hermanos general */
+h3 ~ p {
+    margin-left: 10px;
+}
+
+/* Pseudo-clases */
+button:hover {
+    background: #ec4899;
+    color: white;
+    transform: scale(1.05);
+}
+
+input:focus {
+    outline: 3px solid #a855f7;
+    border-color: #a855f7;
+}
+
+li:nth-child(odd) {
+    background: #fef3c7;
+}
+
+li:nth-child(even) {
+    background: #dbeafe;
+}
+
+/* Pseudo-elementos */
+.quote::before {
+    content: "❝";
+    font-size: 2em;
+    color: #a855f7;
+}
+
+.quote::after {
+    content: "❞";
+    font-size: 2em;
+    color: #a855f7;
+}
+
+p::first-line {
+    font-weight: bold;
+    color: #1e293b;
+}
+
+/* Selector múltiple */
+h1, h2, h3 {
+    font-family: 'Arial', sans-serif;
+    color: #1e293b;
+}
+
+/* Selector universal */
+* {
+    box-sizing: border-box;
+}
+
+/* Selector :not() */
+.items li:not(.excluido) {
+    border: 2px solid #10b981;
+    padding: 8px;
+    margin: 5px;
+}</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="selectors-preview">
+                            <p>Este es un párrafo normal.</p>
+                            
+                            <p class="destacado">Este párrafo tiene la clase "destacado".</p>
+                            
+                            <div id="unico">Este div tiene el ID "unico".</div>
+                            
+                            <p>Enlaces: <a href="#">Enlace normal</a> | <a href="#" target="_blank">Enlace en nueva ventana</a></p>
+                            
+                            <div class="contenedor">
+                                <p>Párrafo dentro del contenedor</p>
+                                <div>
+                                    <p>Párrafo anidado más profundo</p>
+                                </div>
+                            </div>
+                            
+                            <ul class="lista">
+                                <li>Primer elemento (impar)</li>
+                                <li>Segundo elemento (par)</li>
+                                <li>Tercer elemento (impar)</li>
+                                <li>Cuarto elemento (par)</li>
+                            </ul>
+                            
+                            <h3>Título seguido de párrafo</h3>
+                            <p>Este párrafo está justo después del h3</p>
+                            <p>Este es otro párrafo hermano</p>
+                            
+                            <p class="quote">Esta es una cita con pseudo-elementos</p>
+                            
+                            <button>Pasa el mouse aquí</button>
+                            <input type="text" placeholder="Haz clic aquí">
+                            
+                            <ul class="items">
+                                <li>Item normal</li>
+                                <li class="excluido">Item excluido</li>
+                                <li>Otro item normal</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="applyCSS('selectors')">▶️ Aplicar Estilos</button>
+                
+                <div class="tip">
+                    <h3>💡 Especificidad CSS</h3>
+                    <p>La especificidad determina qué estilos se aplican cuando hay conflictos:</p>
+                    <ul>
+                        <li><strong>ID</strong>: 100 puntos (#id)</li>
+                        <li><strong>Clase</strong>: 10 puntos (.clase)</li>
+                        <li><strong>Elemento</strong>: 1 punto (p, div, etc.)</li>
+                        <li><strong>!important</strong>: Gana siempre (úsalo con moderación)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Box Model -->
+            <div class="section" id="box-model">
+                <h2>📦 Box Model</h2>
+                
+                <div class="info-box">
+                    <h3>📏 El Modelo de Caja</h3>
+                    <p>Todos los elementos HTML son cajas rectangulares. El Box Model define cómo se calculan las dimensiones y espaciado de estos elementos.</p>
+                </div>
+                
+                <div class="interactive-element">
+                    <h3>Box Model Interactivo</h3>
+                    <div class="control-panel">
+                        <div class="control-group">
+                            <label for="padding-control">Padding: <span id="padding-value">20</span>px</label>
+                            <input type="range" id="padding-control" min="0" max="50" value="20" oninput="updateBoxModel()">
+                        </div>
+                        <div class="control-group">
+                            <label for="margin-control">Margin: <span id="margin-value">20</span>px</label>
+                            <input type="range" id="margin-control" min="0" max="50" value="20" oninput="updateBoxModel()">
+                        </div>
+                        <div class="control-group">
+                            <label for="border-control">Border: <span id="border-value">5</span>px</label>
+                            <input type="range" id="border-control" min="0" max="20" value="5" oninput="updateBoxModel()">
+                        </div>
+                    </div>
+                    <div id="box-model-demo" style="
+                        background: #a855f7;
+                        color: white;
+                        padding: 20px;
+                        margin: 20px;
+                        border: 5px solid #6366f1;
+                        text-align: center;
+                        transition: all 0.3s ease;
+                    ">
+                        Contenido
+                    </div>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span>box-model.css</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="box-model-css">/* Box Model Básico */
+.box {
+    /* Contenido */
+    width: 300px;
+    height: 200px;
+    
+    /* Padding (espacio interno) */
+    padding: 20px;
+    /* También puedes especificar cada lado */
+    /* padding-top: 10px;
+       padding-right: 15px;
+       padding-bottom: 10px;
+       padding-left: 15px; */
+    /* O usar shorthand */
+    /* padding: 10px 15px; */ /* vertical horizontal */
+    /* padding: 10px 15px 20px 25px; */ /* top right bottom left */
+    
+    /* Border */
+    border: 3px solid #6366f1;
+    border-radius: 12px;
+    
+    /* Margin (espacio externo) */
+    margin: 20px auto; /* centrado horizontal */
+    
+    /* Background */
+    background: linear-gradient(45deg, #a855f7, #ec4899);
+    color: white;
+}
+
+/* Box-sizing */
+.box-content {
+    box-sizing: content-box; /* Default */
+    width: 200px;
+    padding: 20px;
+    border: 5px solid #3b82f6;
+    /* Ancho total = 200 + 40 + 10 = 250px */
+}
+
+.box-border {
+    box-sizing: border-box; /* Incluye padding y border */
+    width: 200px;
+    padding: 20px;
+    border: 5px solid #10b981;
+    /* Ancho total = 200px */
+}
+
+/* Display types */
+.inline {
+    display: inline;
+    background: #fef3c7;
+    padding: 5px 10px;
+    margin: 10px; /* margin vertical no funciona en inline */
+}
+
+.inline-block {
+    display: inline-block;
+    background: #dbeafe;
+    padding: 10px;
+    margin: 10px;
+}
+
+.block {
+    display: block;
+    background: #fce7f3;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+/* Overflow */
+.overflow-demo {
+    width: 200px;
+    height: 100px;
+    border: 2px solid #a855f7;
+    padding: 10px;
+    margin: 10px;
+}
+
+.overflow-visible {
+    overflow: visible; /* Default */
+    background: #fef3c7;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+    background: #dbeafe;
+}
+
+.overflow-scroll {
+    overflow: scroll;
+    background: #fce7f3;
+}
+
+.overflow-auto {
+    overflow: auto;
+    background: #dcfce7;
+}
+
+/* Min y Max dimensions */
+.responsive-box {
+    min-width: 200px;
+    max-width: 500px;
+    min-height: 100px;
+    width: 80%;
+    padding: 20px;
+    background: #e0e7ff;
+    border: 2px solid #6366f1;
+    margin: 20px auto;
+}</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="box-model-preview">
+                            <div class="box">
+                                Esta es una caja con el modelo de caja completo
+                            </div>
+                            
+                            <h4>Box-sizing Comparison:</h4>
+                            <div class="box-content">content-box (default)</div>
+                            <div class="box-border">border-box</div>
+                            
+                            <h4>Display Types:</h4>
+                            <span class="inline">Inline 1</span>
+                            <span class="inline">Inline 2</span>
+                            <div class="inline-block">Inline-block 1</div>
+                            <div class="inline-block">Inline-block 2</div>
+                            <div class="block">Block element</div>
+                            
+                            <h4>Overflow Examples:</h4>
+                            <div class="overflow-demo overflow-visible">
+                                Este texto es muy largo y excede el contenedor. Overflow visible muestra todo el contenido.
+                            </div>
+                            <div class="overflow-demo overflow-hidden">
+                                Este texto es muy largo y excede el contenedor. Overflow hidden oculta el exceso.
+                            </div>
+                            <div class="overflow-demo overflow-scroll">
+                                Este texto es muy largo y excede el contenedor. Overflow scroll siempre muestra barras de desplazamiento.
+                            </div>
+                            <div class="overflow-demo overflow-auto">
+                                Este texto es muy largo y excede el contenedor. Overflow auto muestra barras solo cuando es necesario.
+                            </div>
+                            
+                            <div class="responsive-box">
+                                Caja responsiva con min/max width
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="applyCSS('box-model')">▶️ Aplicar Estilos</button>
+            </div>
+            
+            <!-- Colores y Fondos -->
+            <div class="section" id="colors">
+                <h2>🎨 Colores y Fondos</h2>
+                
+                <div class="info-box">
+                    <h3>🌈 Trabajando con Colores</h3>
+                    <p>CSS ofrece múltiples formas de definir colores y fondos, desde colores sólidos hasta gradientes complejos.</p>
+                </div>
+                
+                <div class="color-palette">
+                    <div class="color-box" style="background: #ef4444;">#ef4444</div>
+                    <div class="color-box" style="background: #f59e0b;">#f59e0b</div>
+                    <div class="color-box" style="background: #10b981;">#10b981</div>
+                    <div class="color-box" style="background: #3b82f6;">#3b82f6</div>
+                    <div class="color-box" style="background: #a855f7;">#a855f7</div>
+                    <div class="color-box" style="background: #ec4899;">#ec4899</div>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span>colores.css</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="colors-css">/* Formatos de color */
+.color-hex {
+    color: #a855f7; /* Hexadecimal */
+}
+
+.color-rgb {
+    color: rgb(168, 85, 247); /* RGB */
+}
+
+.color-rgba {
+    color: rgba(168, 85, 247, 0.8); /* RGBA con transparencia */
+}
+
+.color-hsl {
+    color: hsl(270, 91%, 65%); /* HSL */
+}
+
+.color-named {
+    color: rebeccapurple; /* Nombre de color */
+}
+
+/* Fondos sólidos */
+.bg-solid {
+    background-color: #fef3c7;
+    padding: 20px;
+    margin: 10px 0;
+}
+
+/* Gradientes lineales */
+.gradient-linear {
+    background: linear-gradient(to right, #667eea, #764ba2);
+    color: white;
+    padding: 20px;
+    margin: 10px 0;
+}
+
+.gradient-diagonal {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    padding: 20px;
+    margin: 10px 0;
+}
+
+.gradient-multi {
+    background: linear-gradient(to right, 
+        #ff0000 0%, 
+        #ffff00 25%, 
+        #00ff00 50%, 
+        #00ffff 75%, 
+        #0000ff 100%);
+    color: white;
+    padding: 20px;
+    margin: 10px 0;
+}
+
+/* Gradientes radiales */
+.gradient-radial {
+    background: radial-gradient(circle, #ffd89b, #19547b);
+    color: white;
+    padding: 40px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+/* Gradiente cónico */
+.gradient-conic {
+    background: conic-gradient(
+        from 0deg,
+        #ff0000,
+        #ffff00,
+        #00ff00,
+        #00ffff,
+        #0000ff,
+        #ff00ff,
+        #ff0000
+    );
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin: 20px auto;
+}
+
+/* Patrones con gradientes */
+.pattern-stripes {
+    background: repeating-linear-gradient(
+        45deg,
+        #606dbc,
+        #606dbc 10px,
+        #465298 10px,
+        #465298 20px
+    );
+    color: white;
+    padding: 20px;
+    margin: 10px 0;
+}
+
+/* Múltiples fondos */
+.multiple-bg {
+    background: 
+        linear-gradient(rgba(168, 85, 247, 0.8), rgba(236, 72, 153, 0.8)),
+        url('https://via.placeholder.com/400x200');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 40px;
+    text-align: center;
+}
+
+/* Efectos de fondo */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 20px;
+    border-radius: 16px;
+}
+
+/* Variables CSS para colores */
+:root {
+    --primary-color: #a855f7;
+    --secondary-color: #3b82f6;
+    --accent-color: #10b981;
+}
+
+.using-variables {
+    background: var(--primary-color);
+    color: white;
+    padding: 20px;
+    position: relative;
+}
+
+.using-variables::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--secondary-color);
+    opacity: 0.3;
+}
+
+/* Transparencia y opacidad */
+.opacity-demo {
+    background: #a855f7;
+    color: white;
+    padding: 20px;
+    margin: 10px 0;
+}
+
+.opacity-50 {
+    opacity: 0.5;
+}
+
+.opacity-hover {
+    transition: opacity 0.3s ease;
+}
+
+.opacity-hover:hover {
+    opacity: 0.7;
+}</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="colors-preview">
+                            <h4>Formatos de Color:</h4>
+                            <p class="color-hex">Color Hexadecimal</p>
+                            <p class="color-rgb">Color RGB</p>
+                            <p class="color-rgba">Color RGBA con transparencia</p>
+                            <p class="color-hsl">Color HSL</p>
+                            <p class="color-named">Color con nombre</p>
+                            
+                            <h4>Tipos de Fondos:</h4>
+                            <div class="bg-solid">Fondo sólido</div>
+                            <div class="gradient-linear">Gradiente lineal horizontal</div>
+                            <div class="gradient-diagonal">Gradiente diagonal</div>
+                            <div class="gradient-multi">Gradiente multicolor</div>
+                            <div class="gradient-radial">Gradiente radial</div>
+                            <div class="gradient-conic"></div>
+                            <div class="pattern-stripes">Patrón de rayas</div>
+                            <div class="multiple-bg">Múltiples fondos combinados</div>
+                            
+                            <div style="background: #1e293b; padding: 20px; margin: 10px 0;">
+                                <div class="glass-effect">Efecto de vidrio (glassmorphism)</div>
+                            </div>
+                            
+                            <div class="using-variables">Usando variables CSS</div>
+                            
+                            <h4>Opacidad:</h4>
+                            <div class="opacity-demo">Opacidad 100%</div>
+                            <div class="opacity-demo opacity-50">Opacidad 50%</div>
+                            <div class="opacity-demo opacity-hover">Pasa el mouse (hover opacity)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="applyCSS('colors')">▶️ Aplicar Estilos</button>
+            </div>
+            
+            <!-- Tipografía -->
+            <div class="section" id="typography">
+                <h2>✏️ Tipografía</h2>
+                
+                <div class="info-box">
+                    <h3>📝 Control de Texto</h3>
+                    <p>CSS proporciona control completo sobre la apariencia del texto, desde fuentes hasta espaciado y efectos decorativos.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span>tipografia.css</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="typography-css">/* Importar fuentes de Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap');
+
+/* Familias de fuentes */
+.font-sans {
+    font-family: 'Roboto', Arial, sans-serif;
+}
+
+.font-serif {
+    font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-mono {
+    font-family: 'Courier New', monospace;
+}
+
+/* Tamaños de fuente */
+.text-xs { font-size: 0.75rem; }
+.text-sm { font-size: 0.875rem; }
+.text-base { font-size: 1rem; }
+.text-lg { font-size: 1.25rem; }
+.text-xl { font-size: 1.5rem; }
+.text-2xl { font-size: 2rem; }
+.text-3xl { font-size: 3rem; }
+
+/* Peso de fuente */
+.font-light { font-weight: 300; }
+.font-normal { font-weight: 400; }
+.font-bold { font-weight: 700; }
+.font-black { font-weight: 900; }
+
+/* Estilos de fuente */
+.italic { font-style: italic; }
+.oblique { font-style: oblique; }
+
+/* Transformación de texto */
+.uppercase { text-transform: uppercase; }
+.lowercase { text-transform: lowercase; }
+.capitalize { text-transform: capitalize; }
+
+/* Decoración de texto */
+.underline { text-decoration: underline; }
+.line-through { text-decoration: line-through; }
+.overline { text-decoration: overline; }
+
+.decoration-wavy {
+    text-decoration: underline wavy #a855f7;
+}
+
+/* Alineación de texto */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+/* Espaciado */
+.letter-spacing {
+    letter-spacing: 0.1em;
+}
+
+.word-spacing {
+    word-spacing: 0.5em;
+}
+
+.line-height-tight {
+    line-height: 1.2;
+}
+
+.line-height-normal {
+    line-height: 1.6;
+}
+
+.line-height-loose {
+    line-height: 2;
+}
+
+/* Indentación */
+.text-indent {
+    text-indent: 2em;
+}
+
+/* Sombras de texto */
+.text-shadow-sm {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.text-shadow-md {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.text-shadow-glow {
+    text-shadow: 0 0 10px #a855f7;
+}
+
+.text-shadow-3d {
+    text-shadow: 
+        1px 1px 0 #ccc,
+        2px 2px 0 #bbb,
+        3px 3px 0 #aaa,
+        4px 4px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Overflow de texto */
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.text-wrap {
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+/* Efectos avanzados */
+.gradient-text {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.stroke-text {
+    -webkit-text-stroke: 2px #a855f7;
+    -webkit-text-fill-color: transparent;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+/* Columnas de texto */
+.text-columns {
+    column-count: 2;
+    column-gap: 30px;
+    column-rule: 1px solid #e2e8f0;
+    text-align: justify;
+}
+
+/* Variables de fuente */
+.custom-font {
+    --font-size: clamp(1rem, 2vw, 1.5rem);
+    font-size: var(--font-size);
+    line-height: 1.6;
+}</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="typography-preview">
+                            <h4>Familias de Fuente:</h4>
+                            <p class="font-sans">Sans-serif: Roboto (Texto moderno y limpio)</p>
+                            <p class="font-serif">Serif: Playfair Display (Texto elegante)</p>
+                            <p class="font-mono">Monospace: Código y datos</p>
+                            
+                            <h4>Tamaños:</h4>
+                            <p class="text-xs">Extra pequeño</p>
+                            <p class="text-base">Tamaño base</p>
+                            <p class="text-xl">Extra grande</p>
+                            <p class="text-3xl">3X grande</p>
+                            
+                            <h4>Peso y Estilo:</h4>
+                            <p class="font-light">Light 300</p>
+                            <p class="font-bold">Bold 700</p>
+                            <p class="italic">Texto en itálica</p>
+                            
+                            <h4>Transformación:</h4>
+                            <p class="uppercase">texto en mayúsculas</p>
+                            <p class="lowercase">TEXTO EN MINÚSCULAS</p>
+                            <p class="capitalize">capitalizar cada palabra</p>
+                            
+                            <h4>Decoración:</h4>
+                            <p class="underline">Texto subrayado</p>
+                            <p class="line-through">Texto tachado</p>
+                            <p class="decoration-wavy">Subrayado ondulado</p>
+                            
+                            <h4>Alineación:</h4>
+                            <p class="text-left">Alineado a la izquierda</p>
+                            <p class="text-center">Alineado al centro</p>
+                            <p class="text-right">Alineado a la derecha</p>
+                            
+                            <h4>Espaciado:</h4>
+                            <p class="letter-spacing">Espaciado entre letras</p>
+                            <p class="word-spacing">Espaciado entre palabras</p>
+                            <p class="line-height-tight">Interlineado apretado. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <p class="line-height-loose">Interlineado amplio. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            
+                            <h4>Sombras:</h4>
+                            <p class="text-shadow-sm">Sombra suave</p>
+                            <p class="text-shadow-glow">Efecto de brillo</p>
+                            <p class="text-shadow-3d">Efecto 3D</p>
+                            
+                            <h4>Efectos Especiales:</h4>
+                            <p class="gradient-text">Texto con Gradiente</p>
+                            <p class="stroke-text">Texto con Contorno</p>
+                            
+                            <p class="text-truncate">Este texto es muy largo y será truncado con puntos suspensivos</p>
+                            
+                            <div class="text-columns">
+                                <h4>Texto en Columnas</h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="applyCSS('typography')">▶️ Aplicar Estilos</button>
+            </div>
+            
+            <!-- Flexbox -->
+            <div class="section" id="flexbox">
+                <h2>💪 Flexbox</h2>
+                
+                <div class="info-box">
+                    <h3>📐 Layout Flexible</h3>
+                    <p>Flexbox es un sistema de layout unidimensional que facilita la alineación y distribución de elementos.</p>
+                </div>
+                
+                <div class="interactive-element">
+                    <h3>Flexbox Interactivo</h3>
+                    <div class="control-panel">
+                        <div class="control-group">
+                            <label for="flex-direction">flex-direction:</label>
+                            <select id="flex-direction" onchange="updateFlexbox()">
+                                <option value="row">row</option>
+                                <option value="row-reverse">row-reverse</option>
+                                <option value="column">column</option>
+                                <option value="column-reverse">column-reverse</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="justify-content">justify-content:</label>
+                            <select id="justify-content" onchange="updateFlexbox()">
+                                <option value="flex-start">flex-start</option>
+                                <option value="flex-end">flex-end</option>
+                                <option value="center">center</option>
+                                <option value="space-between">space-between</option>
+                                <option value="space-around">space-around</option>
+                                <option value="space-evenly">space-evenly</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="align-items">align-items:</label>
+                            <select id="align-items" onchange="updateFlexbox()">
+                                <option value="flex-start">flex-start</option>
+                                <option value="flex-end">flex-end</option>
+                                <option value="center">center</option>
+                                <option value="stretch">stretch</option>
+                                <option value="baseline">baseline</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="flexbox-demo" class="flex-container" style="
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: flex-start;
+                        align-items: flex-start;
+                        min-height: 200px;
+                        background: #f3f4f6;
+                        border: 2px dashed #a855f7;
+                    ">
+                        <div class="flex-item">1</div>
+                        <div class="flex-item">2</div>
+                        <div class="flex-item">3</div>
+                    </div>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span>flexbox.css</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="flexbox-css">/* Container Flex */
+.flex-container {
+    display: flex;
+    /* También: inline-flex */
+}
+
+/* Dirección del eje principal */
+.flex-row {
+    display: flex;
+    flex-direction: row; /* Default */
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Justificación (eje principal) */
+.justify-start {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.justify-center {
+    display: flex;
+    justify-content: center;
+}
+
+.justify-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.justify-around {
+    display: flex;
+    justify-content: space-around;
+}
+
+.justify-evenly {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/* Alineación (eje cruzado) */
+.items-center {
+    display: flex;
+    align-items: center;
+}
+
+.items-stretch {
+    display: flex;
+    align-items: stretch;
+}
+
+/* Wrap */
+.flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.flex-nowrap {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+/* Gap entre elementos */
+.gap-demo {
+    display: flex;
+    gap: 20px; /* Espacio entre elementos */
+}
+
+/* Propiedades de los items */
+.flex-item-grow {
+    flex-grow: 1; /* Crece para llenar espacio */
+}
+
+.flex-item-shrink {
+    flex-shrink: 0; /* No se encoge */
+}
+
+.flex-item-basis {
+    flex-basis: 200px; /* Tamaño base */
+}
+
+/* Shorthand flex */
+.flex-1 {
+    flex: 1; /* grow: 1, shrink: 1, basis: 0% */
+}
+
+.flex-auto {
+    flex: auto; /* grow: 1, shrink: 1, basis: auto */
+}
+
+.flex-none {
+    flex: none; /* grow: 0, shrink: 0, basis: auto */
+}
+
+/* Orden */
+.order-first {
+    order: -1;
+}
+
+.order-last {
+    order: 999;
+}
+
+/* Align self (override para un item) */
+.self-start {
+    align-self: flex-start;
+}
+
+.self-center {
+    align-self: center;
+}
+
+.self-end {
+    align-self: flex-end;
+}
+
+/* Ejemplos prácticos */
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #1e293b;
+    color: white;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+/* Card layout */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.card {
+    flex: 1 1 300px; /* grow, shrink, basis */
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Centrado perfecto */
+.center-perfect {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+/* Layout Sidebar */
+.layout-sidebar {
+    display: flex;
+    min-height: 400px;
+}
+
+.sidebar {
+    flex: 0 0 250px; /* No crece, no se encoge, 250px */
+    background: #f3f4f6;
+    padding: 1rem;
+}
+
+.main-content {
+    flex: 1; /* Toma el espacio restante */
+    padding: 1rem;
+}
+
+/* Footer con espaciado */
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 2rem;
+    background: #1e293b;
+    color: white;
+}</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="flexbox-preview">
+                            <h4>Navbar con Flexbox:</h4>
+                            <nav class="navbar">
+                                <div>Logo</div>
+                                <ul class="nav-links">
+                                    <li>Inicio</li>
+                                    <li>Servicios</li>
+                                    <li>Contacto</li>
+                                </ul>
+                            </nav>
+                            
+                            <h4>Cards Flexibles:</h4>
+                            <div class="card-container">
+                                <div class="card">Card 1</div>
+                                <div class="card">Card 2</div>
+                                <div class="card">Card 3</div>
+                            </div>
+                            
+                            <h4>Centrado Perfecto:</h4>
+                            <div class="center-perfect" style="background: #e0e7ff;">
+                                <div style="background: #6366f1; color: white; padding: 20px; border-radius: 8px;">
+                                    Centrado
+                                </div>
+                            </div>
+                            
+                            <h4>Layout con Sidebar:</h4>
+                            <div class="layout-sidebar">
+                                <aside class="sidebar">Sidebar</aside>
+                                <main class="main-content">Contenido Principal</main>
+                            </div>
+                            
+                            <h4>Footer Flexible:</h4>
+                            <footer class="footer">
+                                <div>© 2025 Mi Sitio</div>
+                                <div>Enlaces Sociales</div>
+                                <div>Contacto</div>
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="applyCSS('flexbox')">▶️ Aplicar Estilos</button>
+            </div>
+            
+            <!-- CSS Grid -->
+            <div class="section" id="grid">
+                <h2>🔲 CSS Grid</h2>
+                
+                <div class="info-box">
+                    <h3>🏗️ Layout Bidimensional</h3>
+                    <p>CSS Grid es un sistema de layout bidimensional que permite crear diseños complejos con filas y columnas.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span>grid.css</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="grid-css">/* Grid Container Básico */
+.grid-container {
+    display: grid;
+    /* También: inline-grid */
+}
+
+/* Definir columnas y filas */
+.grid-basic {
+    display: grid;
+    grid-template-columns: 200px 200px 200px;
+    grid-template-rows: 100px 100px;
+    gap: 10px;
+}
+
+/* Unidades flexibles */
+.grid-flexible {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr; /* Fracciones */
+    gap: 20px;
+}
+
+/* Repeat */
+.grid-repeat {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 100px);
+    gap: 15px;
+}
+
+/* Auto-fill y auto-fit */
+.grid-autofill {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.grid-autofit {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+/* Grid areas */
+.grid-areas {
+    display: grid;
+    grid-template-areas:
+        "header header header"
+        "sidebar main main"
+        "footer footer footer";
+    grid-template-columns: 200px 1fr 1fr;
+    grid-template-rows: 60px 1fr 60px;
+    gap: 10px;
+    min-height: 400px;
+}
+
+.header { grid-area: header; }
+.sidebar { grid-area: sidebar; }
+.main { grid-area: main; }
+.footer { grid-area: footer; }
+
+/* Posicionamiento de items */
+.grid-item-span {
+    grid-column: span 2; /* Ocupa 2 columnas */
+    grid-row: span 2; /* Ocupa 2 filas */
+}
+
+.grid-item-position {
+    grid-column: 1 / 3; /* De columna 1 a 3 */
+    grid-row: 2 / 4; /* De fila 2 a 4 */
+}
+
+/* Alineación */
+.grid-align {
+    display: grid;
+    justify-items: center; /* Alinea items horizontalmente */
+    align-items: center; /* Alinea items verticalmente */
+    justify-content: center; /* Alinea grid horizontalmente */
+    align-content: center; /* Alinea grid verticalmente */
+}
+
+/* Grid implícito */
+.grid-implicit {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 100px; /* Filas automáticas */
+    grid-auto-flow: dense; /* Llena huecos */
+}
+
+/* Ejemplo: Layout de revista */
+.magazine-layout {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(100px, auto);
+    gap: 20px;
+    padding: 20px;
+}
+
+.magazine-item-featured {
+    grid-column: span 2;
+    grid-row: span 2;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.magazine-item {
+    background: #f3f4f6;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Ejemplo: Dashboard */
+.dashboard {
+    display: grid;
+    grid-template-columns: 250px 1fr 300px;
+    grid-template-rows: 80px 1fr 60px;
+    grid-template-areas:
+        "sidebar header header"
+        "sidebar content widgets"
+        "sidebar footer footer";
+    gap: 20px;
+    min-height: 500px;
+}
+
+.dash-header {
+    grid-area: header;
+    background: #1e293b;
+    color: white;
+    padding: 20px;
+}
+
+.dash-sidebar {
+    grid-area: sidebar;
+    background: #f3f4f6;
+    padding: 20px;
+}
+
+.dash-content {
+    grid-area: content;
+    background: white;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+}
+
+.dash-widgets {
+    grid-area: widgets;
+    background: white;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+}
+
+.dash-footer {
+    grid-area: footer;
+    background: #1e293b;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Ejemplo: Galería de imágenes */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.gallery-item {
+    aspect-ratio: 1;
+    background: linear-gradient(45deg, #f093fb, #f5576c);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.5em;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover {
+    transform: scale(1.05);
+}</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="grid-preview">
+                            <h4>Grid Básico 3x2:</h4>
+                            <div class="grid-basic" style="display: grid; grid-template-columns: 100px 100px 100px; grid-template-rows: 60px 60px; gap: 10px; margin-bottom: 20px;">
+                                <div style="background: #a855f7; color: white; padding: 10px;">1</div>
+                                <div style="background: #3b82f6; color: white; padding: 10px;">2</div>
+                                <div style="background: #10b981; color: white; padding: 10px;">3</div>
+                                <div style="background: #f59e0b; color: white; padding: 10px;">4</div>
+                                <div style="background: #ef4444; color: white; padding: 10px;">5</div>
+                                <div style="background: #ec4899; color: white; padding: 10px;">6</div>
+                            </div>
+                            
+                            <h4>Grid con Areas:</h4>
+                            <div class="grid-areas">
+                                <div class="header" style="background: #1e293b; color: white; padding: 15px;">Header</div>
+                                <div class="sidebar" style="background: #f3f4f6; padding: 15px;">Sidebar</div>
+                                <div class="main" style="background: white; border: 1px solid #e2e8f0; padding: 15px;">Main Content</div>
+                                <div class="footer" style="background: #1e293b; color: white; padding: 15px;">Footer</div>
+                            </div>
+                            
+                            <h4>Layout de Revista:</h4>
+                            <div class="magazine-layout">
+                                <div class="magazine-item-featured">Artículo Destacado</div>
+                                <div class="magazine-item">Artículo 1</div>
+                                <div class="magazine-item">Artículo 2</div>
+                                <div class="magazine-item">Artículo 3</div>
+                                <div class="magazine-item">Artículo 4</div>
+                                <div class="magazine-item-featured">Otro Destacado</div>
+                                <div class="magazine-item">Artículo 5</div>
+                                <div class="magazine-item">Artículo 6</div>
+                            </div>
+                            
+                            <h4>Dashboard:</h4>
+                            <div class="dashboard">
+                                <div class="dash-header">Dashboard Header</div>
+                                <div class="dash-sidebar">Navegación</div>
+                                <div class="dash-content">Contenido Principal</div>
+                                <div class="dash-widgets">Widgets</div>
+                                <div class="dash-footer">Footer</div>
+                            </div>
+                            
+                            <h4>Galería Responsiva:</h4>
+                            <div class="gallery">
+                                <div class="gallery-item">1</div>
+                                <div class="gallery-item">2</div>
+                                <div class="gallery-item">3</div>
+                                <div class="gallery-item">4</div>
+                                <div class="gallery-item">5</div>
+                                <div class="gallery-item">6</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="applyCSS('grid')">▶️ Aplicar Estilos</button>
+            </div>
+            
+            <!-- Animaciones -->
+            <div class="section" id="animations">
+                <h2>🎬 Animaciones y Transiciones</h2>
+                
+                <div class="info-box">
+                    <h3>✨ Movimiento en CSS</h3>
+                    <p>Las animaciones y transiciones dan vida a tu sitio web, creando experiencias interactivas y atractivas.</p>
+                </div>
+                
+                <div class="animation-demo"></div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span>animaciones.css</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="animations-css">/* Transiciones */
+.transition-demo {
+    padding: 20px;
+    background: #a855f7;
+    color: white;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.transition-demo:hover {
+    background: #9333ea;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(168, 85, 247, 0.3);
+}
+
+/* Transiciones múltiples */
+.multi-transition {
+    padding: 20px;
+    background: #3b82f6;
+    color: white;
+    transition: 
+        background-color 0.3s ease,
+        transform 0.5s ease,
+        box-shadow 0.2s ease;
+}
+
+.multi-transition:hover {
+    background: #2563eb;
+    transform: rotate(5deg) scale(1.1);
+    box-shadow: 0 15px 30px rgba(59, 130, 246, 0.4);
+}
+
+/* Animaciones básicas */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-30px);
+    }
+}
+
+.bounce {
+    animation: bounce 2s ease-in-out infinite;
+}
+
+/* Animación de rotación */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin {
+    animation: spin 3s linear infinite;
+}
+
+/* Pulso */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Fade In */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 1s ease-out;
+}
+
+/* Shake */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+    20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Slide In */
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.5s ease-out;
+}
+
+/* Animación compleja */
+@keyframes complexAnimation {
+    0% {
+        transform: scale(1) rotate(0deg);
+        background: #a855f7;
+        border-radius: 0;
+    }
+    25% {
+        transform: scale(1.2) rotate(90deg);
+        background: #ec4899;
+        border-radius: 20%;
+    }
+    50% {
+        transform: scale(0.8) rotate(180deg);
+        background: #3b82f6;
+        border-radius: 50%;
+    }
+    75% {
+        transform: scale(1.1) rotate(270deg);
+        background: #10b981;
+        border-radius: 20%;
+    }
+    100% {
+        transform: scale(1) rotate(360deg);
+        background: #a855f7;
+        border-radius: 0;
+    }
+}
+
+.complex-animation {
+    width: 100px;
+    height: 100px;
+    animation: complexAnimation 4s ease-in-out infinite;
+}
+
+/* Animación de texto */
+@keyframes typewriter {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+.typewriter {
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 3px solid #a855f7;
+    animation: 
+        typewriter 3s steps(30) forwards,
+        blink 0.5s step-end infinite alternate;
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+
+/* Loading spinner */
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e2e8f0;
+    border-top-color: #a855f7;
+    border-radius: 50%;
+    animation: spinner 1s linear infinite;
+}
+
+/* Animación en hover */
+.hover-animation {
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+    background: #1e293b;
+    color: white;
+}
+
+.hover-animation::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.hover-animation:hover::before {
+    left: 100%;
+}
+
+/* Timing functions */
+.ease-in { animation-timing-function: ease-in; }
+.ease-out { animation-timing-function: ease-out; }
+.ease-in-out { animation-timing-function: ease-in-out; }
+.linear { animation-timing-function: linear; }
+.cubic-bezier { animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+
+/* Control de animación */
+.animation-paused {
+    animation-play-state: paused;
+}
+
+.animation-running {
+    animation-play-state: running;
+}
+
+/* Delay */
+.delay-1s {
+    animation-delay: 1s;
+}</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="animations-preview">
+                            <h4>Transiciones en Hover:</h4>
+                            <div class="transition-demo">Pasa el mouse aquí</div>
+                            <br>
+                            <div class="multi-transition">Múltiples transiciones</div>
+                            
+                            <h4>Animaciones Continuas:</h4>
+                            <div style="display: flex; gap: 30px; justify-content: center; margin: 30px 0;">
+                                <div class="bounce" style="width: 80px; height: 80px; background: #a855f7; border-radius: 12px;"></div>
+                                <div class="spin" style="width: 80px; height: 80px; background: #3b82f6; border-radius: 12px;"></div>
+                                <div class="pulse" style="width: 80px; height: 80px; background: #10b981; border-radius: 12px;"></div>
+                            </div>
+                            
+                            <h4>Animaciones de Entrada:</h4>
+                            <div class="fade-in" style="background: #fef3c7; padding: 20px; margin: 10px 0; border-radius: 8px;">
+                                Fade In Animation
+                            </div>
+                            <div class="slide-in-left" style="background: #dbeafe; padding: 20px; margin: 10px 0; border-radius: 8px;">
+                                Slide In From Left
+                            </div>
+                            
+                            <h4>Animación Compleja:</h4>
+                            <div style="display: flex; justify-content: center; margin: 30px 0;">
+                                <div class="complex-animation"></div>
+                            </div>
+                            
+                            <h4>Efecto Typewriter:</h4>
+                            <p class="typewriter" style="font-family: monospace; font-size: 1.2em;">
+                                Hola, soy un texto animado...
+                            </p>
+                            
+                            <h4>Loading Spinner:</h4>
+                            <div style="display: flex; justify-content: center; margin: 30px 0;">
+                                <div class="spinner"></div>
+                            </div>
+                            
+                            <h4>Hover con Efecto Shine:</h4>
+                            <div class="hover-animation" style="border-radius: 8px; text-align: center;">
+                                Pasa el mouse para ver el efecto
+                            </div>
+                            
+                            <h4>Botón con Shake (click):</h4>
+                            <button onclick="this.classList.add('shake'); setTimeout(() => this.classList.remove('shake'), 500)" 
+                                    style="padding: 12px 30px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                                ¡Hazme temblar!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="applyCSS('animations')">▶️ Aplicar Estilos</button>
+            </div>
+            
+            <!-- Diseño Responsivo -->
+            <div class="section" id="responsive">
+                <h2>📱 Diseño Responsivo</h2>
+                
+                <div class="info-box">
+                    <h3>📐 Adaptable a Todos los Dispositivos</h3>
+                    <p>El diseño responsivo permite que tu sitio se vea bien en cualquier tamaño de pantalla usando media queries y unidades flexibles.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span>responsive.css</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="responsive-css">/* Mobile First Approach */
+
+/* Base styles (mobile) */
+.responsive-container {
+    padding: 20px;
+    background: #f3f4f6;
+}
+
+.responsive-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.responsive-text {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Tablet (≥768px) */
+@media (min-width: 768px) {
+    .responsive-container {
+        padding: 30px;
+    }
+    
+    .responsive-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .responsive-text {
+        font-size: 1.125rem;
+    }
+}
+
+/* Desktop (≥1024px) */
+@media (min-width: 1024px) {
+    .responsive-container {
+        padding: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .responsive-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .responsive-text {
+        font-size: 1.25rem;
+    }
+}
+
+/* Large Desktop (≥1440px) */
+@media (min-width: 1440px) {
+    .responsive-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Unidades Responsivas */
+.responsive-units {
+    /* Viewport units */
+    width: 90vw; /* 90% del ancho del viewport */
+    max-width: 1200px;
+    
+    /* Font size responsivo */
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    
+    /* Padding responsivo */
+    padding: min(5vw, 40px);
+}
+
+/* Imágenes Responsivas */
+.responsive-image {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    display: block;
+}
+
+/* Container Queries (nuevo en CSS) */
+@container (min-width: 400px) {
+    .container-query-item {
+        display: flex;
+        gap: 20px;
+    }
+}
+
+/* Navegación Responsiva */
+.nav-responsive {
+    display: flex;
+    flex-direction: column;
+    background: #1e293b;
+}
+
+.nav-toggle {
+    display: block;
+    padding: 15px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.nav-menu {
+    display: none;
+    flex-direction: column;
+}
+
+.nav-menu.active {
+    display: flex;
+}
+
+.nav-menu a {
+    padding: 15px;
+    color: white;
+    text-decoration: none;
+}
+
+@media (min-width: 768px) {
+    .nav-responsive {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .nav-toggle {
+        display: none;
+    }
+    
+    .nav-menu {
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+/* Flexbox Responsivo */
+.flex-responsive {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+@media (min-width: 768px) {
+    .flex-responsive {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .flex-responsive > * {
+        flex: 1 1 calc(50% - 20px);
+    }
+}
+
+@media (min-width: 1024px) {
+    .flex-responsive > * {
+        flex: 1 1 calc(33.333% - 20px);
+    }
+}
+
+/* Tabla Responsiva */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.responsive-table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
+}
+
+.responsive-table th,
+.responsive-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* Card Stack to Grid */
+.card-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+@media (min-width: 768px) {
+    .card-stack {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}
+
+/* Hide/Show Elements */
+.mobile-only {
+    display: block;
+}
+
+.desktop-only {
+    display: none;
+}
+
+@media (min-width: 1024px) {
+    .mobile-only {
+        display: none;
+    }
+    
+    .desktop-only {
+        display: block;
+    }
+}
+
+/* Aspect Ratio */
+.aspect-ratio-16-9 {
+    aspect-ratio: 16 / 9;
+    background: #a855f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+/* Text Responsive */
+.text-responsive {
+    /* Fluid typography */
+    font-size: calc(1rem + 1vw);
+    
+    /* Con límites */
+    font-size: clamp(
+        1rem,    /* mínimo */
+        2vw,     /* preferido */
+        1.5rem   /* máximo */
+    );
+}</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa - Ajusta el tamaño de tu navegador</span>
+                        </div>
+                        <div id="responsive-preview">
+                            <div class="responsive-container">
+                                <h4>Grid Responsivo:</h4>
+                                <div class="responsive-grid">
+                                    <div class="card">Card 1</div>
+                                    <div class="card">Card 2</div>
+                                    <div class="card">Card 3</div>
+                                    <div class="card">Card 4</div>
+                                </div>
+                                
+                                <h4>Navegación Responsiva:</h4>
+                                <nav class="nav-responsive">
+                                    <div style="padding: 15px; color: white;">Logo</div>
+                                    <button class="nav-toggle" onclick="document.querySelector('.nav-menu').classList.toggle('active')">☰</button>
+                                    <div class="nav-menu">
+                                        <a href="#">Inicio</a>
+                                        <a href="#">Servicios</a>
+                                        <a href="#">Contacto</a>
+                                    </div>
+                                </nav>
+                                
+                                <h4>Elementos Condicionales:</h4>
+                                <div class="mobile-only" style="background: #fef3c7; padding: 15px; margin: 10px 0; border-radius: 8px;">
+                                    📱 Solo visible en móvil
+                                </div>
+                                <div class="desktop-only" style="background: #dbeafe; padding: 15px; margin: 10px 0; border-radius: 8px;">
+                                    💻 Solo visible en desktop
+                                </div>
+                                
+                                <h4>Tabla Responsiva:</h4>
+                                <div class="table-wrapper">
+                                    <table class="responsive-table">
+                                        <thead>
+                                            <tr style="background: #f3f4f6;">
+                                                <th>Columna 1</th>
+                                                <th>Columna 2</th>
+                                                <th>Columna 3</th>
+                                                <th>Columna 4</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Dato 1</td>
+                                                <td>Dato 2</td>
+                                                <td>Dato 3</td>
+                                                <td>Dato 4</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <h4>Aspect Ratio:</h4>
+                                <div class="aspect-ratio-16-9">16:9</div>
+                                
+                                <p class="text-responsive">
+                                    Este texto se adapta al tamaño de la pantalla usando unidades responsivas.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="applyCSS('responsive')">▶️ Aplicar Estilos</button>
+                
+                <div class="tip">
+                    <h3>💡 Breakpoints Comunes</h3>
+                    <ul>
+                        <li><strong>Mobile:</strong> < 768px</li>
+                        <li><strong>Tablet:</strong> 768px - 1023px</li>
+                        <li><strong>Desktop:</strong> 1024px - 1439px</li>
+                        <li><strong>Large Desktop:</strong> ≥ 1440px</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- CSS Avanzado -->
+            <div class="section" id="advanced">
+                <h2>🚀 CSS Avanzado</h2>
+                
+                <div class="info-box">
+                    <h3>⚡ Técnicas Modernas</h3>
+                    <p>CSS moderno incluye variables personalizadas, filtros, blend modes, y muchas características avanzadas.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span>avanzado.css</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="advanced-css">/* CSS Variables (Custom Properties) */
+:root {
+    --primary: #a855f7;
+    --secondary: #3b82f6;
+    --spacing: 20px;
+    --radius: 12px;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.using-vars {
+    background: var(--primary);
+    padding: var(--spacing);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    color: white;
+}
+
+/* CSS Filters */
+.filter-blur {
+    filter: blur(3px);
+}
+
+.filter-grayscale {
+    filter: grayscale(100%);
+}
+
+.filter-sepia {
+    filter: sepia(100%);
+}
+
+.filter-brightness {
+    filter: brightness(1.5);
+}
+
+.filter-contrast {
+    filter: contrast(200%);
+}
+
+.filter-hue {
+    filter: hue-rotate(90deg);
+}
+
+.filter-multiple {
+    filter: contrast(1.2) brightness(1.1) hue-rotate(20deg);
+}
+
+/* Blend Modes */
+.blend-multiply {
+    mix-blend-mode: multiply;
+}
+
+.blend-screen {
+    mix-blend-mode: screen;
+}
+
+.blend-overlay {
+    mix-blend-mode: overlay;
+}
+
+/* CSS Shapes */
+.clip-path-circle {
+    clip-path: circle(50%);
+}
+
+.clip-path-polygon {
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.shape-outside {
+    shape-outside: circle(50%);
+    float: left;
+    margin: 20px;
+}
+
+/* CSS Scroll Snap */
+.scroll-container {
+    scroll-snap-type: x mandatory;
+    overflow-x: scroll;
+    display: flex;
+    gap: 20px;
+}
+
+.scroll-item {
+    scroll-snap-align: center;
+    flex: 0 0 300px;
+    height: 200px;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius);
+}
+
+/* CSS Counters */
+.counter-list {
+    counter-reset: section;
+    list-style: none;
+}
+
+.counter-list li {
+    counter-increment: section;
+    padding: 10px;
+}
+
+.counter-list li::before {
+    content: "Sección " counter(section) ": ";
+    font-weight: bold;
+    color: var(--primary);
+}
+
+/* CSS Grid Advanced */
+.masonry {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-auto-rows: 20px;
+    gap: 20px;
+}
+
+.masonry-item-small {
+    grid-row: span 10;
+    background: #fef3c7;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.masonry-item-medium {
+    grid-row: span 15;
+    background: #dbeafe;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.masonry-item-large {
+    grid-row: span 20;
+    background: #fce7f3;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* CSS Logical Properties */
+.logical-properties {
+    margin-inline: auto; /* margin-left y margin-right */
+    padding-block: 2rem; /* padding-top y padding-bottom */
+    border-inline-start: 4px solid var(--primary); /* border-left en LTR */
+    max-inline-size: 800px; /* max-width */
+}
+
+/* CSS :has() selector */
+.card:has(img) {
+    padding: 0; /* Sin padding si tiene imagen */
+}
+
+.form:has(input:invalid) {
+    border: 2px solid #ef4444;
+}
+
+/* CSS Layers */
+@layer base {
+    h1 { color: black; }
+}
+
+@layer theme {
+    h1 { color: var(--primary); }
+}
+
+@layer utilities {
+    .text-center { text-align: center; }
+}
+
+/* CSS Nesting (experimental) */
+.parent {
+    background: #f3f4f6;
+    padding: 20px;
+    
+    & .child {
+        background: white;
+        padding: 15px;
+        
+        &:hover {
+            background: #e2e8f0;
+        }
+    }
+}
+
+/* Scroll Timeline (experimental) */
+@keyframes reveal {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.scroll-reveal {
+    animation: reveal linear;
+    animation-timeline: view();
+    animation-range: entry 25% cover 50%;
+}
+
+/* CSS Math Functions */
+.math-functions {
+    width: min(90%, 1200px);
+    height: max(200px, 20vh);
+    padding: clamp(10px, 2vw, 30px);
+    font-size: calc(1rem + 0.5vw);
+}
+
+/* CSS Subgrid */
+.grid-parent {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 20px;
+}
+
+.grid-child {
+    display: grid;
+    grid-template-columns: subgrid;
+}
+
+/* Backdrop Filter */
+.glassmorphism {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 16px;
+}
+
+/* CSS Isolation */
+.isolated {
+    isolation: isolate; /* Crea nuevo contexto de apilamiento */
+}
+
+/* CSS Contain */
+.contained {
+    contain: layout style; /* Optimización de renderizado */
+}
+
+/* CSS will-change */
+.will-animate {
+    will-change: transform, opacity; /* Optimización para animaciones */
+}</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="advanced-preview">
+                            <h4>Variables CSS:</h4>
+                            <div class="using-vars">Usando variables CSS personalizadas</div>
+                            
+                            <h4>Filtros CSS:</h4>
+                            <div style="display: flex; gap: 15px; flex-wrap: wrap; margin: 20px 0;">
+                                <img src="https://via.placeholder.com/100x100/a855f7/ffffff?text=Normal" alt="Normal">
+                                <img src="https://via.placeholder.com/100x100/a855f7/ffffff?text=Blur" class="filter-blur" alt="Blur">
+                                <img src="https://via.placeholder.com/100x100/a855f7/ffffff?text=Gray" class="filter-grayscale" alt="Grayscale">
+                                <img src="https://via.placeholder.com/100x100/a855f7/ffffff?text=Sepia" class="filter-sepia" alt="Sepia">
+                                <img src="https://via.placeholder.com/100x100/a855f7/ffffff?text=Bright" class="filter-brightness" alt="Brightness">
+                                <img src="https://via.placeholder.com/100x100/a855f7/ffffff?text=Hue" class="filter-hue" alt="Hue">
+                            </div>
+                            
+                            <h4>Clip Path:</h4>
+                            <div style="display: flex; gap: 20px; margin: 20px 0;">
+                                <div style="width: 100px; height: 100px; background: linear-gradient(45deg, #667eea, #764ba2);" class="clip-path-circle"></div>
+                                <div style="width: 100px; height: 100px; background: linear-gradient(45deg, #f093fb, #f5576c);" class="clip-path-polygon"></div>
+                            </div>
+                            
+                            <h4>Scroll Snap:</h4>
+                            <div class="scroll-container" style="padding: 10px; background: #f3f4f6; border-radius: 8px;">
+                                <div class="scroll-item">Snap 1</div>
+                                <div class="scroll-item" style="background: #3b82f6;">Snap 2</div>
+                                <div class="scroll-item" style="background: #10b981;">Snap 3</div>
+                                <div class="scroll-item" style="background: #f59e0b;">Snap 4</div>
+                            </div>
+                            
+                            <h4>CSS Counters:</h4>
+                            <ol class="counter-list">
+                                <li>Introducción</li>
+                                <li>Desarrollo</li>
+                                <li>Conclusión</li>
+                            </ol>
+                            
+                            <h4>Masonry Layout:</h4>
+                            <div class="masonry">
+                                <div class="masonry-item-small">Small</div>
+                                <div class="masonry-item-large">Large</div>
+                                <div class="masonry-item-medium">Medium</div>
+                                <div class="masonry-item-small">Small</div>
+                                <div class="masonry-item-medium">Medium</div>
+                                <div class="masonry-item-large">Large</div>
+                            </div>
+                            
+                            <h4>Glassmorphism:</h4>
+                            <div style="background: linear-gradient(45deg, #667eea, #764ba2); padding: 30px; border-radius: 12px;">
+                                <div class="glassmorphism">
+                                    <h5 style="margin: 0 0 10px 0;">Efecto Glass</h5>
+                                    <p style="margin: 0;">Fondo borroso con transparencia</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="applyCSS('advanced')">▶️ Aplicar Estilos</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Función para cambiar entre secciones
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Desactivar todos los tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Activar el tab correspondiente
+            event.target.classList.add('active');
+            
+            // Aplicar estilos iniciales
+            applyCSS(sectionId);
+        }
+        
+        // Función para aplicar CSS
+        function applyCSS(section) {
+            const cssCode = document.getElementById(section + '-css');
+            const preview = document.getElementById(section + '-preview');
+            
+            if (cssCode && preview) {
+                // Crear o actualizar el elemento style para esta sección
+                let styleElement = document.getElementById(section + '-style');
+                if (!styleElement) {
+                    styleElement = document.createElement('style');
+                    styleElement.id = section + '-style';
+                    document.head.appendChild(styleElement);
+                }
+                
+                // Aplicar los estilos
+                styleElement.textContent = cssCode.innerText || cssCode.textContent;
+                
+                // Añadir efecto de actualización
+                preview.style.animation = 'none';
+                setTimeout(() => {
+                    preview.style.animation = 'fadeIn 0.4s ease';
+                }, 10);
+            }
+        }
+        
+        // Función para actualizar el Box Model interactivo
+        function updateBoxModel() {
+            const box = document.getElementById('box-model-demo');
+            const paddingValue = document.getElementById('padding-control').value;
+            const marginValue = document.getElementById('margin-control').value;
+            const borderValue = document.getElementById('border-control').value;
+            
+            document.getElementById('padding-value').textContent = paddingValue;
+            document.getElementById('margin-value').textContent = marginValue;
+            document.getElementById('border-value').textContent = borderValue;
+            
+            box.style.padding = paddingValue + 'px';
+            box.style.margin = marginValue + 'px';
+            box.style.borderWidth = borderValue + 'px';
+        }
+        
+        // Función para actualizar Flexbox interactivo
+        function updateFlexbox() {
+            const container = document.getElementById('flexbox-demo');
+            const direction = document.getElementById('flex-direction').value;
+            const justify = document.getElementById('justify-content').value;
+            const align = document.getElementById('align-items').value;
+            
+            container.style.flexDirection = direction;
+            container.style.justifyContent = justify;
+            container.style.alignItems = align;
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Aplicar estilos iniciales
+            applyCSS('basics');
+            
+            // Hacer que los editores de código sean editables
+            const codeAreas = document.querySelectorAll('.code-area');
+            codeAreas.forEach(area => {
+                // Prevenir el comportamiento por defecto del tab
+                area.addEventListener('keydown', function(e) {
+                    if (e.key === 'Tab') {
+                        e.preventDefault();
+                        document.execCommand('insertHTML', false, '    ');
+                    }
+                });
+            });
+            
+            // Añadir interactividad a las cajas de colores
+            const colorBoxes = document.querySelectorAll('.color-box');
+            colorBoxes.forEach(box => {
+                box.addEventListener('click', function() {
+                    const color = this.style.background;
+                    navigator.clipboard.writeText(this.textContent);
+                    this.textContent = '¡Copiado!';
+                    setTimeout(() => {
+                        this.textContent = this.getAttribute('data-original') || color;
+                    }, 1000);
+                });
+                box.setAttribute('data-original', box.textContent);
+            });
+        });
+    </script>
+</body>
+</html>

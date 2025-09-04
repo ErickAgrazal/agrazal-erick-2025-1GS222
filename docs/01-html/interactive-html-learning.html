@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Interactivo - Aprende HTML de Forma Visual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --accent: #06b6d4;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .tabs {
+            display: flex;
+            background: var(--light);
+            padding: 10px 20px;
+            gap: 10px;
+            overflow-x: auto;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-size: 0.95em;
+        }
+        
+        .tab:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+        
+        .content-area {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .code-editor {
+            background: #1e293b;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .editor-header {
+            background: #334155;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .dot.red { background: #ef4444; }
+        .dot.yellow { background: #f59e0b; }
+        .dot.green { background: #10b981; }
+        
+        .code-area {
+            padding: 20px;
+            color: #e2e8f0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            min-height: 300px;
+            max-height: 500px;
+            overflow-y: auto;
+            outline: none;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+        
+        .preview {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            min-height: 300px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .preview-header {
+            background: var(--light);
+            margin: -20px -20px 20px -20px;
+            padding: 15px 20px;
+            border-bottom: 2px solid #e2e8f0;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .info-box h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #10b98115, #06b6d415);
+            border-left: 4px solid var(--success);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .tip h3 {
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+        
+        .exercise {
+            background: linear-gradient(135deg, #f59e0b15, #ec489915);
+            border: 2px dashed var(--warning);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+        
+        .exercise h3 {
+            color: var(--warning);
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        button.run-btn {
+            background: linear-gradient(135deg, var(--success), #06b6d4);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            font-size: 1em;
+        }
+        
+        button.run-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--primary);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 0 5px;
+        }
+        
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .concept-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .concept-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .concept-card code {
+            background: var(--light);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--secondary);
+        }
+        
+        .interactive-element {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .interactive-element::before {
+            content: "🎮 Interactivo";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: white;
+            padding: 0 10px;
+            color: #f59e0b;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        /* Syntax highlighting */
+        .tag { color: #ff79c6; }
+        .attr-name { color: #50fa7b; }
+        .attr-value { color: #f1fa8c; }
+        .text { color: #f8f8f2; }
+        .comment { color: #6272a4; font-style: italic; }
+        
+        /* Scrollbar styling */
+        .code-area::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        .code-area::-webkit-scrollbar-track {
+            background: #334155;
+        }
+        
+        .code-area::-webkit-scrollbar-thumb {
+            background: #64748b;
+            border-radius: 4px;
+        }
+        
+        .code-area::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 HTML Interactivo</h1>
+            <p>Aprende HTML de forma visual y práctica - Modifica el código y ve los resultados en tiempo real</p>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showSection('basics')">📝 Conceptos Básicos</button>
+            <button class="tab" onclick="showSection('structure')">🏗️ Estructura HTML</button>
+            <button class="tab" onclick="showSection('text')">📄 Elementos de Texto</button>
+            <button class="tab" onclick="showSection('lists')">📋 Listas</button>
+            <button class="tab" onclick="showSection('links')">🔗 Enlaces y Navegación</button>
+            <button class="tab" onclick="showSection('media')">🖼️ Multimedia</button>
+            <button class="tab" onclick="showSection('forms')">📦 Formularios</button>
+            <button class="tab" onclick="showSection('tables')">📊 Tablas</button>
+            <button class="tab" onclick="showSection('semantic')">🏷️ HTML Semántico</button>
+        </div>
+        
+        <div class="content-area">
+            <!-- Conceptos Básicos -->
+            <div class="section active" id="basics">
+                <h2>📝 Conceptos Básicos de HTML</h2>
+                
+                <div class="info-box">
+                    <h3>💡 ¿Qué es HTML?</h3>
+                    <p>HTML (HyperText Markup Language) es el lenguaje que define la estructura y el contenido de las páginas web. Piensa en él como el esqueleto de tu sitio web.</p>
+                </div>
+                
+                <h3>Anatomía de un Elemento HTML</h3>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">index.html</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="basics-code">
+&lt;!-- Este es un comentario --&gt;
+
+&lt;h1&gt;¡Hola Mundo!&lt;/h1&gt;
+
+&lt;p&gt;Este es un párrafo con &lt;strong&gt;texto importante&lt;/strong&gt; 
+y &lt;em&gt;texto enfatizado&lt;/em&gt;.&lt;/p&gt;
+
+&lt;div id="contenedor" class="principal"&gt;
+    Este es un contenedor div con atributos
+&lt;/div&gt;
+
+&lt;img src="https://via.placeholder.com/200" alt="Imagen de ejemplo"&gt;
+
+&lt;a href="https://www.utp.ac.pa" target="_blank"&gt;
+    Visita la UTP
+&lt;/a&gt;</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="basics-preview"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="updatePreview('basics')">▶️ Actualizar Vista Previa</button>
+                
+                <div class="tip">
+                    <h3>💡 Consejo</h3>
+                    <p>Modifica el código en el editor y haz clic en "Actualizar Vista Previa" para ver los cambios. Prueba a cambiar el texto, añadir más etiquetas o modificar los atributos.</p>
+                </div>
+                
+                <div class="exercise">
+                    <h3>🎯 Ejercicio</h3>
+                    <p>Intenta añadir:</p>
+                    <ul>
+                        <li>Un segundo párrafo con tu nombre</li>
+                        <li>Un título h2 después del h1</li>
+                        <li>Cambia el texto del enlace</li>
+                        <li>Añade un atributo <code>width="300"</code> a la imagen</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Estructura HTML -->
+            <div class="section" id="structure">
+                <h2>🏗️ Estructura de un Documento HTML</h2>
+                
+                <div class="info-box">
+                    <h3>📋 Estructura Estándar</h3>
+                    <p>Todo documento HTML debe seguir una estructura básica que incluye DOCTYPE, html, head y body.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">estructura.html</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="structure-code">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Mi Página Web&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        h1 {
+            color: #6366f1;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;h1&gt;Bienvenidos a mi sitio&lt;/h1&gt;
+        &lt;nav&gt;
+            &lt;a href="#inicio"&gt;Inicio&lt;/a&gt; |
+            &lt;a href="#sobre"&gt;Sobre mí&lt;/a&gt; |
+            &lt;a href="#contacto"&gt;Contacto&lt;/a&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+    
+    &lt;main&gt;
+        &lt;section id="inicio"&gt;
+            &lt;h2&gt;Sección Principal&lt;/h2&gt;
+            &lt;p&gt;Este es el contenido principal de la página.&lt;/p&gt;
+        &lt;/section&gt;
+    &lt;/main&gt;
+    
+    &lt;footer&gt;
+        &lt;p&gt;&copy; 2025 - Todos los derechos reservados&lt;/p&gt;
+    &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="structure-preview"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="updatePreview('structure')">▶️ Actualizar Vista Previa</button>
+                
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <h4>&lt;!DOCTYPE html&gt;</h4>
+                        <p>Declara que el documento usa HTML5</p>
+                    </div>
+                    <div class="concept-card">
+                        <h4>&lt;head&gt;</h4>
+                        <p>Contiene metadatos, título y estilos</p>
+                    </div>
+                    <div class="concept-card">
+                        <h4>&lt;body&gt;</h4>
+                        <p>Todo el contenido visible de la página</p>
+                    </div>
+                    <div class="concept-card">
+                        <h4>&lt;meta&gt;</h4>
+                        <p>Información sobre la página (charset, viewport)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Elementos de Texto -->
+            <div class="section" id="text">
+                <h2>📄 Elementos de Texto</h2>
+                
+                <div class="info-box">
+                    <h3>✏️ Trabajando con Texto</h3>
+                    <p>HTML ofrece múltiples elementos para estructurar y dar formato al texto de manera semántica.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">texto.html</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="text-code">
+&lt;!-- Encabezados --&gt;
+&lt;h1&gt;Encabezado Principal (h1)&lt;/h1&gt;
+&lt;h2&gt;Subtítulo (h2)&lt;/h2&gt;
+&lt;h3&gt;Sección (h3)&lt;/h3&gt;
+&lt;h4&gt;Subsección (h4)&lt;/h4&gt;
+&lt;h5&gt;Apartado (h5)&lt;/h5&gt;
+&lt;h6&gt;Subapartado (h6)&lt;/h6&gt;
+
+&lt;!-- Párrafos y formato --&gt;
+&lt;p&gt;Este es un párrafo normal con &lt;strong&gt;texto importante&lt;/strong&gt; 
+y &lt;em&gt;texto enfatizado&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Puedes usar &lt;mark&gt;texto resaltado&lt;/mark&gt;, 
+&lt;small&gt;texto pequeño&lt;/small&gt;, 
+&lt;del&gt;texto eliminado&lt;/del&gt; y 
+&lt;ins&gt;texto insertado&lt;/ins&gt;.&lt;/p&gt;
+
+&lt;!-- Citas --&gt;
+&lt;blockquote&gt;
+    "El éxito es la suma de pequeños esfuerzos repetidos día tras día."
+    &lt;cite&gt;- Robert Collier&lt;/cite&gt;
+&lt;/blockquote&gt;
+
+&lt;!-- Código --&gt;
+&lt;p&gt;Para código inline usa: &lt;code&gt;console.log('Hola')&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+// Bloque de código
+function saludar() {
+    return "Hola Mundo";
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- Saltos de línea --&gt;
+&lt;p&gt;Primera línea&lt;br&gt;
+Segunda línea&lt;br&gt;
+Tercera línea&lt;/p&gt;
+
+&lt;!-- Línea horizontal --&gt;
+&lt;hr&gt;
+
+&lt;!-- Abreviaciones --&gt;
+&lt;p&gt;La &lt;abbr title="Universidad Tecnológica de Panamá"&gt;UTP&lt;/abbr&gt; 
+es una institución de educación superior.&lt;/p&gt;</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="text-preview"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="updatePreview('text')">▶️ Actualizar Vista Previa</button>
+                
+                <div class="exercise">
+                    <h3>🎯 Ejercicio</h3>
+                    <p>Experimenta con los diferentes elementos de texto:</p>
+                    <ul>
+                        <li>Cambia el orden de importancia de los encabezados</li>
+                        <li>Añade tu propia cita favorita en el blockquote</li>
+                        <li>Crea un párrafo combinando varios tipos de formato</li>
+                        <li>Añade una abreviación para HTML</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Listas -->
+            <div class="section" id="lists">
+                <h2>📋 Listas en HTML</h2>
+                
+                <div class="info-box">
+                    <h3>📝 Tipos de Listas</h3>
+                    <p>HTML soporta tres tipos de listas: ordenadas (ol), desordenadas (ul) y de descripción (dl).</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">listas.html</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="lists-code">
+&lt;h3&gt;Lista Desordenada&lt;/h3&gt;
+&lt;ul&gt;
+    &lt;li&gt;HTML - Estructura&lt;/li&gt;
+    &lt;li&gt;CSS - Estilos&lt;/li&gt;
+    &lt;li&gt;JavaScript - Interactividad&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;Lista Ordenada&lt;/h3&gt;
+&lt;ol&gt;
+    &lt;li&gt;Aprender HTML&lt;/li&gt;
+    &lt;li&gt;Dominar CSS&lt;/li&gt;
+    &lt;li&gt;Practicar JavaScript&lt;/li&gt;
+    &lt;li&gt;Crear proyectos&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3&gt;Lista Ordenada con Tipo&lt;/h3&gt;
+&lt;ol type="A"&gt;
+    &lt;li&gt;Primera opción&lt;/li&gt;
+    &lt;li&gt;Segunda opción&lt;/li&gt;
+    &lt;li&gt;Tercera opción&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3&gt;Lista de Descripción&lt;/h3&gt;
+&lt;dl&gt;
+    &lt;dt&gt;HTML&lt;/dt&gt;
+    &lt;dd&gt;Lenguaje de marcado para crear páginas web&lt;/dd&gt;
+    
+    &lt;dt&gt;CSS&lt;/dt&gt;
+    &lt;dd&gt;Lenguaje para dar estilo a las páginas web&lt;/dd&gt;
+    
+    &lt;dt&gt;JavaScript&lt;/dt&gt;
+    &lt;dd&gt;Lenguaje de programación para añadir interactividad&lt;/dd&gt;
+&lt;/dl&gt;
+
+&lt;h3&gt;Listas Anidadas&lt;/h3&gt;
+&lt;ul&gt;
+    &lt;li&gt;Frontend
+        &lt;ul&gt;
+            &lt;li&gt;HTML&lt;/li&gt;
+            &lt;li&gt;CSS
+                &lt;ul&gt;
+                    &lt;li&gt;Flexbox&lt;/li&gt;
+                    &lt;li&gt;Grid&lt;/li&gt;
+                &lt;/ul&gt;
+            &lt;/li&gt;
+            &lt;li&gt;JavaScript&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/li&gt;
+    &lt;li&gt;Backend
+        &lt;ul&gt;
+            &lt;li&gt;Node.js&lt;/li&gt;
+            &lt;li&gt;Python&lt;/li&gt;
+            &lt;li&gt;PHP&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="lists-preview"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="updatePreview('lists')">▶️ Actualizar Vista Previa</button>
+                
+                <div class="tip">
+                    <h3>💡 Tipos de Numeración</h3>
+                    <p>En listas ordenadas puedes usar: <code>type="1"</code> (números), <code>type="A"</code> (letras mayúsculas), <code>type="a"</code> (letras minúsculas), <code>type="I"</code> (números romanos mayúsculos), <code>type="i"</code> (números romanos minúsculos)</p>
+                </div>
+            </div>
+            
+            <!-- Enlaces -->
+            <div class="section" id="links">
+                <h2>🔗 Enlaces y Navegación</h2>
+                
+                <div class="info-box">
+                    <h3>🌐 Conectando Páginas</h3>
+                    <p>Los enlaces son fundamentales en la web. Permiten navegar entre páginas, secciones y recursos.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">enlaces.html</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="links-code">
+&lt;h3&gt;Tipos de Enlaces&lt;/h3&gt;
+
+&lt;!-- Enlace externo --&gt;
+&lt;p&gt;&lt;a href="https://www.google.com"&gt;Enlace a Google&lt;/a&gt;&lt;/p&gt;
+
+&lt;!-- Enlace con target blank (abre en nueva pestaña) --&gt;
+&lt;p&gt;&lt;a href="https://www.utp.ac.pa" target="_blank"&gt;UTP (nueva pestaña)&lt;/a&gt;&lt;/p&gt;
+
+&lt;!-- Enlace a email --&gt;
+&lt;p&gt;&lt;a href="mailto:estudiante@utp.ac.pa"&gt;Enviar correo&lt;/a&gt;&lt;/p&gt;
+
+&lt;!-- Enlace a teléfono --&gt;
+&lt;p&gt;&lt;a href="tel:+5075600100"&gt;Llamar: +507 560-0100&lt;/a&gt;&lt;/p&gt;
+
+&lt;!-- Enlace de descarga --&gt;
+&lt;p&gt;&lt;a href="/archivo.pdf" download&gt;Descargar PDF&lt;/a&gt;&lt;/p&gt;
+
+&lt;!-- Navegación con anclas --&gt;
+&lt;nav&gt;
+    &lt;h3&gt;Navegación Interna&lt;/h3&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href="#seccion1"&gt;Ir a Sección 1&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#seccion2"&gt;Ir a Sección 2&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#seccion3"&gt;Ir a Sección 3&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;
+
+&lt;div id="seccion1" style="margin-top: 30px; padding: 20px; background: #f0f0f0;"&gt;
+    &lt;h3&gt;Sección 1&lt;/h3&gt;
+    &lt;p&gt;Contenido de la primera sección&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div id="seccion2" style="margin-top: 30px; padding: 20px; background: #e0e0e0;"&gt;
+    &lt;h3&gt;Sección 2&lt;/h3&gt;
+    &lt;p&gt;Contenido de la segunda sección&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div id="seccion3" style="margin-top: 30px; padding: 20px; background: #d0d0d0;"&gt;
+    &lt;h3&gt;Sección 3&lt;/h3&gt;
+    &lt;p&gt;Contenido de la tercera sección&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;!-- Enlace con título (tooltip) --&gt;
+&lt;p&gt;&lt;a href="#" title="Este enlace muestra un tooltip"&gt;Pasa el mouse aquí&lt;/a&gt;&lt;/p&gt;
+
+&lt;!-- Imagen como enlace --&gt;
+&lt;a href="https://www.utp.ac.pa"&gt;
+    &lt;img src="https://via.placeholder.com/150x50/6366f1/ffffff?text=Click+Me" 
+         alt="Imagen clickeable"&gt;
+&lt;/a&gt;</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="links-preview"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="updatePreview('links')">▶️ Actualizar Vista Previa</button>
+            </div>
+            
+            <!-- Multimedia -->
+            <div class="section" id="media">
+                <h2>🖼️ Elementos Multimedia</h2>
+                
+                <div class="info-box">
+                    <h3>🎨 Imágenes, Audio y Video</h3>
+                    <p>HTML5 permite integrar fácilmente contenido multimedia en tus páginas web.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">multimedia.html</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="media-code">
+&lt;h3&gt;Imágenes&lt;/h3&gt;
+
+&lt;!-- Imagen básica --&gt;
+&lt;img src="https://via.placeholder.com/300x200/6366f1/ffffff?text=Imagen+Ejemplo" 
+     alt="Descripción de la imagen"&gt;
+
+&lt;!-- Imagen con dimensiones --&gt;
+&lt;img src="https://via.placeholder.com/400x300/ec4899/ffffff?text=Con+Dimensiones" 
+     alt="Imagen con tamaño específico"
+     width="200" 
+     height="150"&gt;
+
+&lt;!-- Imagen responsive --&gt;
+&lt;img src="https://via.placeholder.com/600x400/06b6d4/ffffff?text=Responsive" 
+     alt="Imagen responsive"
+     style="max-width: 100%; height: auto;"&gt;
+
+&lt;h3&gt;Picture - Imágenes Responsivas&lt;/h3&gt;
+&lt;picture&gt;
+    &lt;source media="(min-width: 650px)" 
+            srcset="https://via.placeholder.com/600x300/10b981/ffffff?text=Desktop"&gt;
+    &lt;source media="(min-width: 465px)" 
+            srcset="https://via.placeholder.com/400x300/f59e0b/ffffff?text=Tablet"&gt;
+    &lt;img src="https://via.placeholder.com/300x300/ef4444/ffffff?text=Mobile" 
+         alt="Imagen adaptativa"&gt;
+&lt;/picture&gt;
+
+&lt;h3&gt;Figure y Figcaption&lt;/h3&gt;
+&lt;figure&gt;
+    &lt;img src="https://via.placeholder.com/300x200/8b5cf6/ffffff?text=Figura" 
+         alt="Ejemplo de figura"&gt;
+    &lt;figcaption&gt;Esta es la descripción de la imagen&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h3&gt;Video&lt;/h3&gt;
+&lt;video width="320" height="240" controls&gt;
+    &lt;source src="movie.mp4" type="video/mp4"&gt;
+    &lt;source src="movie.ogg" type="video/ogg"&gt;
+    Tu navegador no soporta el elemento video.
+&lt;/video&gt;
+
+&lt;h3&gt;Audio&lt;/h3&gt;
+&lt;audio controls&gt;
+    &lt;source src="audio.mp3" type="audio/mpeg"&gt;
+    &lt;source src="audio.ogg" type="audio/ogg"&gt;
+    Tu navegador no soporta el elemento audio.
+&lt;/audio&gt;
+
+&lt;h3&gt;Iframe - Contenido Embebido&lt;/h3&gt;
+&lt;iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3939.986207685568!2d-79.5316!3d9.0645!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8faca8f1dbe80363%3A0xaba25df1f042c10e!2sUniversidad%20Tecnol%C3%B3gica%20de%20Panam%C3%A1!5e0!3m2!1ses!2spa!4v1234567890" 
+        width="100%" 
+        height="300" 
+        style="border:0;" 
+        allowfullscreen="" 
+        loading="lazy"&gt;&lt;/iframe&gt;</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="media-preview"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="updatePreview('media')">▶️ Actualizar Vista Previa</button>
+                
+                <div class="tip">
+                    <h3>💡 Consejo de Accesibilidad</h3>
+                    <p>Siempre incluye el atributo <code>alt</code> en las imágenes para describir su contenido. Esto ayuda a usuarios con lectores de pantalla y mejora el SEO.</p>
+                </div>
+            </div>
+            
+            <!-- Formularios -->
+            <div class="section" id="forms">
+                <h2>📦 Formularios</h2>
+                
+                <div class="info-box">
+                    <h3>📝 Capturando Datos del Usuario</h3>
+                    <p>Los formularios permiten a los usuarios enviar información a tu sitio web.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">formularios.html</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="forms-code">
+&lt;form action="/submit" method="post"&gt;
+    &lt;h3&gt;Formulario de Registro&lt;/h3&gt;
+    
+    &lt;!-- Campos de texto --&gt;
+    &lt;label for="nombre"&gt;Nombre Completo:&lt;/label&gt;
+    &lt;input type="text" id="nombre" name="nombre" required&gt;
+    &lt;br&gt;&lt;br&gt;
+    
+    &lt;label for="email"&gt;Correo Electrónico:&lt;/label&gt;
+    &lt;input type="email" id="email" name="email" required&gt;
+    &lt;br&gt;&lt;br&gt;
+    
+    &lt;label for="password"&gt;Contraseña:&lt;/label&gt;
+    &lt;input type="password" id="password" name="password" minlength="8" required&gt;
+    &lt;br&gt;&lt;br&gt;
+    
+    &lt;label for="edad"&gt;Edad:&lt;/label&gt;
+    &lt;input type="number" id="edad" name="edad" min="18" max="120"&gt;
+    &lt;br&gt;&lt;br&gt;
+    
+    &lt;label for="fecha"&gt;Fecha de Nacimiento:&lt;/label&gt;
+    &lt;input type="date" id="fecha" name="fecha"&gt;
+    &lt;br&gt;&lt;br&gt;
+    
+    &lt;label for="telefono"&gt;Teléfono:&lt;/label&gt;
+    &lt;input type="tel" id="telefono" name="telefono" pattern="[0-9]{4}-[0-9]{4}"&gt;
+    &lt;br&gt;&lt;br&gt;
+    
+    &lt;!-- Radio buttons --&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;Género:&lt;/legend&gt;
+        &lt;input type="radio" id="masculino" name="genero" value="M"&gt;
+        &lt;label for="masculino"&gt;Masculino&lt;/label&gt;&lt;br&gt;
+        &lt;input type="radio" id="femenino" name="genero" value="F"&gt;
+        &lt;label for="femenino"&gt;Femenino&lt;/label&gt;&lt;br&gt;
+        &lt;input type="radio" id="otro" name="genero" value="O"&gt;
+        &lt;label for="otro"&gt;Otro&lt;/label&gt;
+    &lt;/fieldset&gt;
+    &lt;br&gt;
+    
+    &lt;!-- Checkboxes --&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;Intereses:&lt;/legend&gt;
+        &lt;input type="checkbox" id="deportes" name="intereses" value="deportes"&gt;
+        &lt;label for="deportes"&gt;Deportes&lt;/label&gt;&lt;br&gt;
+        &lt;input type="checkbox" id="musica" name="intereses" value="musica"&gt;
+        &lt;label for="musica"&gt;Música&lt;/label&gt;&lt;br&gt;
+        &lt;input type="checkbox" id="lectura" name="intereses" value="lectura"&gt;
+        &lt;label for="lectura"&gt;Lectura&lt;/label&gt;
+    &lt;/fieldset&gt;
+    &lt;br&gt;
+    
+    &lt;!-- Select dropdown --&gt;
+    &lt;label for="pais"&gt;País:&lt;/label&gt;
+    &lt;select id="pais" name="pais"&gt;
+        &lt;option value=""&gt;Seleccione un país&lt;/option&gt;
+        &lt;option value="PA"&gt;Panamá&lt;/option&gt;
+        &lt;option value="CR"&gt;Costa Rica&lt;/option&gt;
+        &lt;option value="CO"&gt;Colombia&lt;/option&gt;
+        &lt;option value="MX"&gt;México&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;br&gt;&lt;br&gt;
+    
+    &lt;!-- Textarea --&gt;
+    &lt;label for="comentarios"&gt;Comentarios:&lt;/label&gt;&lt;br&gt;
+    &lt;textarea id="comentarios" name="comentarios" rows="4" cols="50"&gt;&lt;/textarea&gt;
+    &lt;br&gt;&lt;br&gt;
+    
+    &lt;!-- Slider --&gt;
+    &lt;label for="satisfaccion"&gt;Nivel de Satisfacción:&lt;/label&gt;
+    &lt;input type="range" id="satisfaccion" name="satisfaccion" min="0" max="10"&gt;
+    &lt;br&gt;&lt;br&gt;
+    
+    &lt;!-- Color picker --&gt;
+    &lt;label for="color"&gt;Color Favorito:&lt;/label&gt;
+    &lt;input type="color" id="color" name="color" value="#6366f1"&gt;
+    &lt;br&gt;&lt;br&gt;
+    
+    &lt;!-- File upload --&gt;
+    &lt;label for="archivo"&gt;Subir archivo:&lt;/label&gt;
+    &lt;input type="file" id="archivo" name="archivo" accept=".pdf,.doc,.docx"&gt;
+    &lt;br&gt;&lt;br&gt;
+    
+    &lt;!-- Buttons --&gt;
+    &lt;button type="submit"&gt;Enviar&lt;/button&gt;
+    &lt;button type="reset"&gt;Limpiar&lt;/button&gt;
+    &lt;button type="button" onclick="alert('¡Hola!')"&gt;Saludar&lt;/button&gt;
+&lt;/form&gt;</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="forms-preview"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="updatePreview('forms')">▶️ Actualizar Vista Previa</button>
+                
+                <div class="exercise">
+                    <h3>🎯 Ejercicio</h3>
+                    <p>Prueba a interactuar con el formulario:</p>
+                    <ul>
+                        <li>Intenta enviar el formulario sin llenar los campos requeridos</li>
+                        <li>Prueba el selector de colores</li>
+                        <li>Mueve el slider de satisfacción</li>
+                        <li>Añade un nuevo campo de tipo <code>search</code></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Tablas -->
+            <div class="section" id="tables">
+                <h2>📊 Tablas</h2>
+                
+                <div class="info-box">
+                    <h3>📋 Organizando Datos Tabulares</h3>
+                    <p>Las tablas son perfectas para mostrar datos estructurados en filas y columnas.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">tablas.html</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="tables-code">
+&lt;h3&gt;Tabla de Estudiantes&lt;/h3&gt;
+
+&lt;table border="1" style="width: 100%; border-collapse: collapse;"&gt;
+    &lt;caption&gt;Registro de Estudiantes - Desarrollo V&lt;/caption&gt;
+    &lt;thead&gt;
+        &lt;tr style="background-color: #6366f1; color: white;"&gt;
+            &lt;th&gt;ID&lt;/th&gt;
+            &lt;th&gt;Nombre&lt;/th&gt;
+            &lt;th&gt;Carrera&lt;/th&gt;
+            &lt;th&gt;Promedio&lt;/th&gt;
+            &lt;th&gt;Estado&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;001&lt;/td&gt;
+            &lt;td&gt;Ana García&lt;/td&gt;
+            &lt;td&gt;Ing. Software&lt;/td&gt;
+            &lt;td&gt;4.5&lt;/td&gt;
+            &lt;td&gt;Activo&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr style="background-color: #f0f0f0;"&gt;
+            &lt;td&gt;002&lt;/td&gt;
+            &lt;td&gt;Carlos López&lt;/td&gt;
+            &lt;td&gt;Ing. Sistemas&lt;/td&gt;
+            &lt;td&gt;4.2&lt;/td&gt;
+            &lt;td&gt;Activo&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;003&lt;/td&gt;
+            &lt;td&gt;María Rodríguez&lt;/td&gt;
+            &lt;td&gt;Ing. Software&lt;/td&gt;
+            &lt;td&gt;4.8&lt;/td&gt;
+            &lt;td&gt;Activo&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+    &lt;tfoot&gt;
+        &lt;tr style="background-color: #e0e0e0; font-weight: bold;"&gt;
+            &lt;td colspan="3"&gt;Promedio General&lt;/td&gt;
+            &lt;td&gt;4.5&lt;/td&gt;
+            &lt;td&gt;-&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tfoot&gt;
+&lt;/table&gt;
+
+&lt;br&gt;
+
+&lt;h3&gt;Tabla con Celdas Combinadas&lt;/h3&gt;
+
+&lt;table border="1" style="width: 100%; border-collapse: collapse;"&gt;
+    &lt;tr&gt;
+        &lt;th rowspan="2"&gt;Curso&lt;/th&gt;
+        &lt;th colspan="3"&gt;Evaluaciones&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Parcial 1&lt;/th&gt;
+        &lt;th&gt;Parcial 2&lt;/th&gt;
+        &lt;th&gt;Final&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;HTML&lt;/td&gt;
+        &lt;td&gt;85&lt;/td&gt;
+        &lt;td&gt;90&lt;/td&gt;
+        &lt;td&gt;95&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;CSS&lt;/td&gt;
+        &lt;td&gt;80&lt;/td&gt;
+        &lt;td&gt;85&lt;/td&gt;
+        &lt;td&gt;88&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;JavaScript&lt;/td&gt;
+        &lt;td&gt;75&lt;/td&gt;
+        &lt;td&gt;82&lt;/td&gt;
+        &lt;td&gt;90&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;br&gt;
+
+&lt;h3&gt;Tabla Responsive con Estilo Moderno&lt;/h3&gt;
+
+&lt;style&gt;
+    .modern-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .modern-table th {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 12px;
+        text-align: left;
+    }
+    .modern-table td {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+    }
+    .modern-table tr:hover {
+        background-color: #f5f5f5;
+    }
+&lt;/style&gt;
+
+&lt;table class="modern-table"&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Proyecto&lt;/th&gt;
+            &lt;th&gt;Tecnología&lt;/th&gt;
+            &lt;th&gt;Estado&lt;/th&gt;
+            &lt;th&gt;Progreso&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;🌐 Sitio Web&lt;/td&gt;
+            &lt;td&gt;HTML/CSS&lt;/td&gt;
+            &lt;td&gt;✅ Completado&lt;/td&gt;
+            &lt;td&gt;100%&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;📱 App Móvil&lt;/td&gt;
+            &lt;td&gt;React Native&lt;/td&gt;
+            &lt;td&gt;🔄 En Progreso&lt;/td&gt;
+            &lt;td&gt;65%&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;🎮 Juego Web&lt;/td&gt;
+            &lt;td&gt;JavaScript&lt;/td&gt;
+            &lt;td&gt;⏳ Pendiente&lt;/td&gt;
+            &lt;td&gt;15%&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="tables-preview"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="updatePreview('tables')">▶️ Actualizar Vista Previa</button>
+            </div>
+            
+            <!-- HTML Semántico -->
+            <div class="section" id="semantic">
+                <h2>🏷️ HTML Semántico</h2>
+                
+                <div class="info-box">
+                    <h3>🎯 Estructura con Significado</h3>
+                    <p>HTML5 introduce elementos semánticos que describen claramente su contenido y propósito.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">semantico.html</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="semantic-code">
+&lt;!-- Estructura semántica completa --&gt;
+&lt;header style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px;"&gt;
+    &lt;h1&gt;Mi Sitio Web Semántico&lt;/h1&gt;
+    &lt;nav&gt;
+        &lt;ul style="list-style: none; padding: 0; display: flex; gap: 20px;"&gt;
+            &lt;li&gt;&lt;a href="#" style="color: white;"&gt;Inicio&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#" style="color: white;"&gt;Sobre Nosotros&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#" style="color: white;"&gt;Servicios&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#" style="color: white;"&gt;Contacto&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/nav&gt;
+&lt;/header&gt;
+
+&lt;main style="padding: 20px;"&gt;
+    &lt;article style="background: #f9fafb; padding: 20px; margin-bottom: 20px; border-radius: 8px;"&gt;
+        &lt;header&gt;
+            &lt;h2&gt;Introducción a HTML5 Semántico&lt;/h2&gt;
+            &lt;time datetime="2025-01-15"&gt;15 de Enero, 2025&lt;/time&gt;
+        &lt;/header&gt;
+        
+        &lt;section&gt;
+            &lt;h3&gt;¿Por qué usar HTML semántico?&lt;/h3&gt;
+            &lt;p&gt;El HTML semántico mejora la accesibilidad, el SEO y la mantenibilidad del código.&lt;/p&gt;
+        &lt;/section&gt;
+        
+        &lt;section&gt;
+            &lt;h3&gt;Beneficios principales&lt;/h3&gt;
+            &lt;ul&gt;
+                &lt;li&gt;Mejor estructura del documento&lt;/li&gt;
+                &lt;li&gt;Accesibilidad mejorada&lt;/li&gt;
+                &lt;li&gt;SEO optimizado&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/section&gt;
+        
+        &lt;footer&gt;
+            &lt;p&gt;Escrito por: &lt;address style="display: inline;"&gt;estudiante@utp.ac.pa&lt;/address&gt;&lt;/p&gt;
+        &lt;/footer&gt;
+    &lt;/article&gt;
+    
+    &lt;aside style="background: #e5e7eb; padding: 20px; border-radius: 8px; margin-bottom: 20px;"&gt;
+        &lt;h3&gt;Contenido Relacionado&lt;/h3&gt;
+        &lt;ul&gt;
+            &lt;li&gt;&lt;a href="#"&gt;CSS Grid Layout&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#"&gt;Flexbox Guide&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#"&gt;JavaScript Basics&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/aside&gt;
+    
+    &lt;section style="background: #fef3c7; padding: 20px; border-radius: 8px; margin-bottom: 20px;"&gt;
+        &lt;h3&gt;Elementos Adicionales&lt;/h3&gt;
+        
+        &lt;details&gt;
+            &lt;summary style="cursor: pointer; font-weight: bold;"&gt;Ver más información&lt;/summary&gt;
+            &lt;p&gt;Este es contenido expandible que solo se muestra al hacer clic.&lt;/p&gt;
+        &lt;/details&gt;
+        
+        &lt;br&gt;
+        
+        &lt;mark&gt;Texto destacado importante&lt;/mark&gt;
+        
+        &lt;br&gt;&lt;br&gt;
+        
+        &lt;progress value="70" max="100"&gt;&lt;/progress&gt; 70% completado
+        
+        &lt;br&gt;&lt;br&gt;
+        
+        &lt;meter value="8" min="0" max="10"&gt;&lt;/meter&gt; 8 de 10
+    &lt;/section&gt;
+    
+    &lt;section&gt;
+        &lt;h3&gt;Diálogo&lt;/h3&gt;
+        &lt;dialog open style="border: 2px solid #6366f1; border-radius: 8px; padding: 20px;"&gt;
+            &lt;h4&gt;Ventana de Diálogo&lt;/h4&gt;
+            &lt;p&gt;Este es un elemento dialog de HTML5&lt;/p&gt;
+            &lt;button onclick="this.parentElement.close()"&gt;Cerrar&lt;/button&gt;
+        &lt;/dialog&gt;
+    &lt;/section&gt;
+&lt;/main&gt;
+
+&lt;footer style="background: #1e293b; color: white; padding: 20px; text-align: center;"&gt;
+    &lt;p&gt;&copy; 2025 Universidad Tecnológica de Panamá&lt;/p&gt;
+    &lt;p&gt;
+        &lt;small&gt;Todos los derechos reservados&lt;/small&gt;
+    &lt;/p&gt;
+&lt;/footer&gt;</div>
+                    </div>
+                    
+                    <div class="preview">
+                        <div class="preview-header">
+                            <span>👁️ Vista Previa</span>
+                        </div>
+                        <div id="semantic-preview"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="updatePreview('semantic')">▶️ Actualizar Vista Previa</button>
+                
+                <div class="tip">
+                    <h3>💡 Elementos Semánticos Importantes</h3>
+                    <ul>
+                        <li><code>&lt;header&gt;</code> - Encabezado de la página o sección</li>
+                        <li><code>&lt;nav&gt;</code> - Navegación principal</li>
+                        <li><code>&lt;main&gt;</code> - Contenido principal (único por página)</li>
+                        <li><code>&lt;article&gt;</code> - Contenido independiente</li>
+                        <li><code>&lt;section&gt;</code> - Sección temática</li>
+                        <li><code>&lt;aside&gt;</code> - Contenido relacionado o complementario</li>
+                        <li><code>&lt;footer&gt;</code> - Pie de página o sección</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Función para cambiar entre secciones
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Desactivar todos los tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Activar el tab correspondiente
+            event.target.classList.add('active');
+            
+            // Actualizar la vista previa inicial
+            updatePreview(sectionId);
+        }
+        
+        // Función para actualizar la vista previa
+        function updatePreview(section) {
+            const codeArea = document.getElementById(section + '-code');
+            const preview = document.getElementById(section + '-preview');
+            
+            if (codeArea && preview) {
+                // Obtener el contenido del editor
+                let code = codeArea.innerText || codeArea.textContent;
+                
+                // Decodificar entidades HTML
+                code = code.replace(/&lt;/g, '<')
+                          .replace(/&gt;/g, '>')
+                          .replace(/&amp;/g, '&')
+                          .replace(/&quot;/g, '"')
+                          .replace(/&#39;/g, "'");
+                
+                // Actualizar la vista previa
+                preview.innerHTML = code;
+                
+                // Añadir efecto de actualización
+                preview.style.animation = 'none';
+                setTimeout(() => {
+                    preview.style.animation = 'fadeIn 0.4s ease';
+                }, 10);
+            }
+        }
+        
+        // Inicializar la primera vista previa
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePreview('basics');
+            
+            // Hacer que todos los editores de código actualicen la vista previa en tiempo real
+            const codeAreas = document.querySelectorAll('.code-area');
+            codeAreas.forEach(area => {
+                area.addEventListener('input', function() {
+                    const sectionId = this.id.replace('-code', '');
+                    // Auto-actualización desactivada para mejor rendimiento
+                    // Descomentar la siguiente línea para actualización en tiempo real
+                    // updatePreview(sectionId);
+                });
+                
+                // Prevenir el comportamiento por defecto del tab en el editor
+                area.addEventListener('keydown', function(e) {
+                    if (e.key === 'Tab') {
+                        e.preventDefault();
+                        document.execCommand('insertHTML', false, '    ');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
