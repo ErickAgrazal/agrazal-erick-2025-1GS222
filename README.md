@@ -1,5 +1,5 @@
-# Desarrollo de Software V - Universidad Tecnológica de Panamá
-**Año 2025 - Primer Semestre**
+# Desarrollo de Software V
+**Universidad Tecnológica de Panamá | Año 2025 - Primer Semestre**
 
 ## Descripción del Curso
 
