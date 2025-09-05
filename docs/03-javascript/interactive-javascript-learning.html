@@ -1,0 +1,2695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Interactivo - Aprende JS de Forma Práctica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #f59e0b;
+            --primary-dark: #d97706;
+            --secondary: #8b5cf6;
+            --accent: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --success: #22c55e;
+            --warning: #eab308;
+            --error: #ef4444;
+            --gradient-1: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            --gradient-2: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            --gradient-3: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--gradient-1);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+        
+        header {
+            background: var(--gradient-1);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .tabs {
+            display: flex;
+            background: var(--light);
+            padding: 10px 20px;
+            gap: 10px;
+            overflow-x: auto;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-size: 0.95em;
+        }
+        
+        .tab:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+        
+        .content-area {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        @media (max-width: 1024px) {
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .code-editor {
+            background: #1e293b;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .editor-header {
+            background: #334155;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .dot.red { background: #ef4444; }
+        .dot.yellow { background: #f59e0b; }
+        .dot.green { background: #10b981; }
+        
+        .code-area {
+            padding: 20px;
+            color: #e2e8f0;
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+            font-size: 14px;
+            min-height: 350px;
+            max-height: 600px;
+            overflow-y: auto;
+            outline: none;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+        
+        .output {
+            background: #1e293b;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .output-header {
+            background: #334155;
+            padding: 15px 20px;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .output-content {
+            padding: 20px;
+            color: #10b981;
+            font-family: 'Monaco', 'Courier New', monospace;
+            min-height: 300px;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1));
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .info-box h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
+            border-left: 4px solid var(--success);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .tip h3 {
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(245, 158, 11, 0.1));
+            border-left: 4px solid var(--warning);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h3 {
+            color: var(--warning);
+            margin-bottom: 10px;
+        }
+        
+        .exercise {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(139, 92, 246, 0.1));
+            border: 2px dashed var(--warning);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+        
+        .exercise h3 {
+            color: var(--warning);
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        button.run-btn {
+            background: var(--gradient-3);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            font-size: 1em;
+        }
+        
+        button.run-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .concept-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .concept-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .concept-card code {
+            background: var(--light);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--secondary);
+        }
+        
+        .interactive-element {
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.5), rgba(253, 230, 138, 0.5));
+            border: 2px solid #f59e0b;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .interactive-element::before {
+            content: "🎮 Interactivo";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: white;
+            padding: 0 10px;
+            color: #f59e0b;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .control-panel {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+        }
+        
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .control-group input,
+        .control-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+        
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .console-log {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            color: white;
+            font-family: 'Monaco', 'Courier New', monospace;
+            min-height: 150px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .console-log .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .console-log .log-entry:last-child {
+            border-bottom: none;
+        }
+        
+        .console-log .log-info { color: #3b82f6; }
+        .console-log .log-warning { color: #f59e0b; }
+        .console-log .log-error { color: #ef4444; }
+        .console-log .log-success { color: #10b981; }
+        
+        .demo-button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .result-box {
+            background: #f3f4f6;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+        
+        /* Syntax highlighting para el código */
+        .keyword { color: #f59e0b; }
+        .string { color: #10b981; }
+        .number { color: #3b82f6; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #ec4899; }
+        .variable { color: #8b5cf6; }
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 2em;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+        
+        h3 {
+            color: var(--primary-dark);
+            margin: 20px 0 15px 0;
+            font-size: 1.4em;
+        }
+        
+        /* Animación para elementos interactivos */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Scrollbar personalizado */
+        .code-area::-webkit-scrollbar,
+        .output-content::-webkit-scrollbar,
+        .console-log::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        .code-area::-webkit-scrollbar-track,
+        .output-content::-webkit-scrollbar-track,
+        .console-log::-webkit-scrollbar-track {
+            background: #334155;
+        }
+        
+        .code-area::-webkit-scrollbar-thumb,
+        .output-content::-webkit-scrollbar-thumb,
+        .console-log::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ JavaScript Interactivo</h1>
+            <p>Aprende JavaScript con ejemplos prácticos - Ejecuta código y observa los resultados en tiempo real</p>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showSection('basics')">📚 Fundamentos</button>
+            <button class="tab" onclick="showSection('variables')">📦 Variables y Tipos</button>
+            <button class="tab" onclick="showSection('operators')">➕ Operadores</button>
+            <button class="tab" onclick="showSection('control')">🔀 Control de Flujo</button>
+            <button class="tab" onclick="showSection('functions')">⚙️ Funciones</button>
+            <button class="tab" onclick="showSection('arrays')">📋 Arrays</button>
+            <button class="tab" onclick="showSection('objects')">📘 Objetos</button>
+            <button class="tab" onclick="showSection('dom')">🌐 DOM</button>
+            <button class="tab" onclick="showSection('events')">🎯 Eventos</button>
+            <button class="tab" onclick="showSection('async')">⏳ Asíncrono</button>
+            <button class="tab" onclick="showSection('es6')">🚀 ES6+</button>
+        </div>
+        
+        <div class="content-area">
+            <!-- Fundamentos -->
+            <div class="section active" id="basics">
+                <h2>📚 Fundamentos de JavaScript</h2>
+                
+                <div class="info-box">
+                    <h3>💡 ¿Qué es JavaScript?</h3>
+                    <p>JavaScript es un lenguaje de programación que permite crear sitios web interactivos. Es el único lenguaje que los navegadores pueden ejecutar nativamente.</p>
+                </div>
+                
+                <h3>Tu Primer Programa JavaScript</h3>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">script.js</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="basics-code">// Esto es un comentario de una línea
+
+/* Este es un comentario
+   de múltiples líneas */
+
+// Imprimir en la consola
+console.log("¡Hola Mundo!");
+console.log("Bienvenido a JavaScript");
+
+// Diferentes tipos de mensajes de consola
+console.info("Mensaje informativo");
+console.warn("Mensaje de advertencia");
+console.error("Mensaje de error");
+
+// Mostrar un alert
+alert("¡Hola desde JavaScript!");
+
+// Pedir información al usuario
+let nombre = prompt("¿Cómo te llamas?");
+console.log("Hola, " + nombre);
+
+// Confirmar una acción
+let confirmado = confirm("¿Estás listo para aprender JavaScript?");
+if (confirmado) {
+    console.log("¡Excelente! Comencemos");
+} else {
+    console.log("No hay problema, toma tu tiempo");
+}
+
+// Operaciones matemáticas básicas
+console.log("5 + 3 =", 5 + 3);
+console.log("10 - 4 =", 10 - 4);
+console.log("6 * 7 =", 6 * 7);
+console.log("20 / 4 =", 20 / 4);
+console.log("10 % 3 =", 10 % 3); // Módulo (resto)</div>
+                    </div>
+                    
+                    <div class="output">
+                        <div class="output-header">
+                            <span>📺 Consola</span>
+                        </div>
+                        <div class="output-content" id="basics-output"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="runCode('basics')">▶️ Ejecutar Código</button>
+                
+                <div class="tip">
+                    <h3>💡 Consejo</h3>
+                    <p>La consola del navegador es tu mejor amiga. Presiona F12 o Ctrl+Shift+I para abrir las herramientas de desarrollador y ver la consola real.</p>
+                </div>
+                
+                <div class="exercise">
+                    <h3>🎯 Ejercicio</h3>
+                    <p>Modifica el código para:</p>
+                    <ul>
+                        <li>Cambiar el mensaje de saludo</li>
+                        <li>Añadir más operaciones matemáticas</li>
+                        <li>Experimentar con diferentes tipos de mensajes de consola</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Variables y Tipos -->
+            <div class="section" id="variables">
+                <h2>📦 Variables y Tipos de Datos</h2>
+                
+                <div class="info-box">
+                    <h3>🎯 Variables</h3>
+                    <p>Las variables son contenedores para almacenar valores. JavaScript tiene tres formas de declarar variables: var, let y const.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">variables.js</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="variables-code">// DECLARACIÓN DE VARIABLES
+
+// let - puede cambiar su valor
+let edad = 25;
+console.log("Edad inicial:", edad);
+edad = 26; // Reasignación permitida
+console.log("Edad actualizada:", edad);
+
+// const - no puede cambiar su valor
+const PI = 3.14159;
+console.log("PI:", PI);
+// PI = 3.14; // Error! No se puede reasignar
+
+// var - forma antigua (evitar su uso)
+var nombre = "Juan";
+console.log("Nombre:", nombre);
+
+// TIPOS DE DATOS
+
+// 1. Números
+let entero = 42;
+let decimal = 3.14;
+let negativo = -10;
+console.log("Números:", entero, decimal, negativo);
+
+// 2. Strings (Cadenas de texto)
+let saludo = "Hola";
+let despedida = 'Adiós';
+let frase = `Me llamo ${nombre} y tengo ${edad} años`; // Template literals
+console.log("Strings:", saludo, despedida, frase);
+
+// 3. Booleanos
+let verdadero = true;
+let falso = false;
+console.log("Booleanos:", verdadero, falso);
+
+// 4. Undefined y Null
+let sinDefinir; // undefined
+let nulo = null;
+console.log("Sin definir:", sinDefinir);
+console.log("Nulo:", nulo);
+
+// 5. Arrays
+let frutas = ["Manzana", "Banana", "Naranja"];
+console.log("Array de frutas:", frutas);
+console.log("Primera fruta:", frutas[0]);
+console.log("Cantidad de frutas:", frutas.length);
+
+// 6. Objetos
+let persona = {
+    nombre: "Ana",
+    edad: 30,
+    ciudad: "Panamá"
+};
+console.log("Objeto persona:", persona);
+console.log("Nombre de la persona:", persona.nombre);
+
+// TYPEOF - Verificar el tipo de dato
+console.log("\n=== TIPOS DE DATOS ===");
+console.log("Tipo de edad:", typeof edad);
+console.log("Tipo de PI:", typeof PI);
+console.log("Tipo de nombre:", typeof nombre);
+console.log("Tipo de verdadero:", typeof verdadero);
+console.log("Tipo de frutas:", typeof frutas);
+console.log("Tipo de persona:", typeof persona);
+console.log("Tipo de sinDefinir:", typeof sinDefinir);
+console.log("Tipo de nulo:", typeof nulo);
+
+// CONVERSIÓN DE TIPOS
+
+// String a Número
+let textoNumero = "123";
+let numero = parseInt(textoNumero);
+console.log("\nConversión '123' a número:", numero);
+
+let textoDecimal = "3.14";
+let decimal2 = parseFloat(textoDecimal);
+console.log("Conversión '3.14' a decimal:", decimal2);
+
+// Número a String
+let num = 100;
+let numComoTexto = num.toString();
+console.log("Conversión 100 a string:", numComoTexto);
+
+// Conversión automática (coerción)
+console.log("\n=== COERCIÓN ===");
+console.log("'5' + 3 =", "5" + 3); // "53" (concatenación)
+console.log("'5' - 3 =", "5" - 3); // 2 (resta numérica)
+console.log("'5' * 3 =", "5" * 3); // 15 (multiplicación)</div>
+                    </div>
+                    
+                    <div class="output">
+                        <div class="output-header">
+                            <span>📺 Consola</span>
+                        </div>
+                        <div class="output-content" id="variables-output"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="runCode('variables')">▶️ Ejecutar Código</button>
+                
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <h4>let</h4>
+                        <p>Variable que puede cambiar</p>
+                        <code>let x = 10;</code>
+                    </div>
+                    <div class="concept-card">
+                        <h4>const</h4>
+                        <p>Variable constante</p>
+                        <code>const PI = 3.14;</code>
+                    </div>
+                    <div class="concept-card">
+                        <h4>typeof</h4>
+                        <p>Obtener tipo de dato</p>
+                        <code>typeof variable</code>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Operadores -->
+            <div class="section" id="operators">
+                <h2>➕ Operadores</h2>
+                
+                <div class="info-box">
+                    <h3>🔧 Tipos de Operadores</h3>
+                    <p>JavaScript tiene varios tipos de operadores: aritméticos, de comparación, lógicos y de asignación.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">operadores.js</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="operators-code">// OPERADORES ARITMÉTICOS
+console.log("=== OPERADORES ARITMÉTICOS ===");
+let a = 10, b = 3;
+console.log(`a = ${a}, b = ${b}`);
+console.log(`Suma: ${a} + ${b} = ${a + b}`);
+console.log(`Resta: ${a} - ${b} = ${a - b}`);
+console.log(`Multiplicación: ${a} * ${b} = ${a * b}`);
+console.log(`División: ${a} / ${b} = ${a / b}`);
+console.log(`Módulo: ${a} % ${b} = ${a % b}`);
+console.log(`Exponenciación: ${a} ** 2 = ${a ** 2}`);
+
+// Incremento y Decremento
+let contador = 5;
+console.log("\n=== INCREMENTO/DECREMENTO ===");
+console.log("Contador inicial:", contador);
+console.log("contador++ =", contador++); // Post-incremento
+console.log("Contador después:", contador);
+console.log("++contador =", ++contador); // Pre-incremento
+console.log("contador-- =", contador--); // Post-decremento
+console.log("--contador =", --contador); // Pre-decremento
+
+// OPERADORES DE COMPARACIÓN
+console.log("\n=== OPERADORES DE COMPARACIÓN ===");
+let x = 5, y = "5";
+console.log(`x = ${x} (number), y = "${y}" (string)`);
+console.log(`x == y: ${x == y}`);   // Igualdad (con coerción)
+console.log(`x === y: ${x === y}`); // Igualdad estricta
+console.log(`x != y: ${x != y}`);   // Desigualdad
+console.log(`x !== y: ${x !== y}`); // Desigualdad estricta
+console.log(`10 > 5: ${10 > 5}`);
+console.log(`10 < 5: ${10 < 5}`);
+console.log(`10 >= 10: ${10 >= 10}`);
+console.log(`10 <= 9: ${10 <= 9}`);
+
+// OPERADORES LÓGICOS
+console.log("\n=== OPERADORES LÓGICOS ===");
+let verdadero = true, falso = false;
+console.log(`verdadero = ${verdadero}, falso = ${falso}`);
+console.log(`AND (&&): verdadero && verdadero = ${verdadero && verdadero}`);
+console.log(`AND (&&): verdadero && falso = ${verdadero && falso}`);
+console.log(`OR (||): verdadero || falso = ${verdadero || falso}`);
+console.log(`OR (||): falso || falso = ${falso || falso}`);
+console.log(`NOT (!): !verdadero = ${!verdadero}`);
+console.log(`NOT (!): !falso = ${!falso}`);
+
+// OPERADORES DE ASIGNACIÓN
+console.log("\n=== OPERADORES DE ASIGNACIÓN ===");
+let num = 10;
+console.log("num inicial:", num);
+num += 5; // num = num + 5
+console.log("num += 5:", num);
+num -= 3; // num = num - 3
+console.log("num -= 3:", num);
+num *= 2; // num = num * 2
+console.log("num *= 2:", num);
+num /= 4; // num = num / 4
+console.log("num /= 4:", num);
+num %= 5; // num = num % 5
+console.log("num %= 5:", num);
+
+// OPERADOR TERNARIO
+console.log("\n=== OPERADOR TERNARIO ===");
+let edad = 18;
+let mensaje = edad >= 18 ? "Eres mayor de edad" : "Eres menor de edad";
+console.log(`Edad: ${edad}, Mensaje: ${mensaje}`);
+
+let nota = 85;
+let calificacion = nota >= 90 ? "A" :
+                   nota >= 80 ? "B" :
+                   nota >= 70 ? "C" :
+                   nota >= 60 ? "D" : "F";
+console.log(`Nota: ${nota}, Calificación: ${calificacion}`);
+
+// OPERADORES DE CORTOCIRCUITO
+console.log("\n=== CORTOCIRCUITO ===");
+let nombre = "";
+let nombrePorDefecto = nombre || "Usuario Anónimo";
+console.log(`Nombre: "${nombre}", Por defecto: "${nombrePorDefecto}"`);
+
+let usuario = "Juan";
+usuario && console.log(`Bienvenido, ${usuario}`);
+
+// OPERADOR NULLISH COALESCING (??)
+console.log("\n=== NULLISH COALESCING ===");
+let valor1 = null;
+let valor2 = undefined;
+let valor3 = 0;
+let valor4 = "";
+
+console.log(`null ?? "default": ${valor1 ?? "default"}`);
+console.log(`undefined ?? "default": ${valor2 ?? "default"}`);
+console.log(`0 ?? "default": ${valor3 ?? "default"}`);
+console.log(`"" ?? "default": ${valor4 ?? "default"}`);</div>
+                    </div>
+                    
+                    <div class="output">
+                        <div class="output-header">
+                            <span>📺 Consola</span>
+                        </div>
+                        <div class="output-content" id="operators-output"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="runCode('operators')">▶️ Ejecutar Código</button>
+            </div>
+            
+            <!-- Control de Flujo -->
+            <div class="section" id="control">
+                <h2>🔀 Control de Flujo</h2>
+                
+                <div class="info-box">
+                    <h3>🎛️ Estructuras de Control</h3>
+                    <p>Las estructuras de control permiten tomar decisiones y repetir acciones en tu código.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">control.js</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="control-code">// IF - ELSE
+console.log("=== IF - ELSE ===");
+let edad = 20;
+
+if (edad >= 18) {
+    console.log("Eres mayor de edad");
+} else {
+    console.log("Eres menor de edad");
+}
+
+// IF - ELSE IF - ELSE
+let hora = new Date().getHours();
+console.log(`\nSon las ${hora} horas`);
+
+if (hora < 12) {
+    console.log("Buenos días");
+} else if (hora < 18) {
+    console.log("Buenas tardes");
+} else {
+    console.log("Buenas noches");
+}
+
+// SWITCH
+console.log("\n=== SWITCH ===");
+let dia = new Date().getDay();
+let nombreDia;
+
+switch (dia) {
+    case 0:
+        nombreDia = "Domingo";
+        break;
+    case 1:
+        nombreDia = "Lunes";
+        break;
+    case 2:
+        nombreDia = "Martes";
+        break;
+    case 3:
+        nombreDia = "Miércoles";
+        break;
+    case 4:
+        nombreDia = "Jueves";
+        break;
+    case 5:
+        nombreDia = "Viernes";
+        break;
+    case 6:
+        nombreDia = "Sábado";
+        break;
+    default:
+        nombreDia = "Día inválido";
+}
+console.log(`Hoy es ${nombreDia}`);
+
+// FOR LOOP
+console.log("\n=== FOR LOOP ===");
+console.log("Contando del 1 al 5:");
+for (let i = 1; i <= 5; i++) {
+    console.log(`Iteración ${i}`);
+}
+
+console.log("\nTabla del 3:");
+for (let i = 1; i <= 10; i++) {
+    console.log(`3 x ${i} = ${3 * i}`);
+}
+
+// WHILE LOOP
+console.log("\n=== WHILE LOOP ===");
+let contador = 0;
+console.log("Contando con while:");
+while (contador < 5) {
+    console.log(`Contador: ${contador}`);
+    contador++;
+}
+
+// DO-WHILE LOOP
+console.log("\n=== DO-WHILE LOOP ===");
+let numero = 1;
+console.log("Números pares hasta 10:");
+do {
+    if (numero % 2 === 0) {
+        console.log(numero);
+    }
+    numero++;
+} while (numero <= 10);
+
+// FOR...OF (para arrays)
+console.log("\n=== FOR...OF ===");
+let colores = ["Rojo", "Verde", "Azul"];
+console.log("Iterando sobre colores:");
+for (let color of colores) {
+    console.log(`Color: ${color}`);
+}
+
+// FOR...IN (para objetos)
+console.log("\n=== FOR...IN ===");
+let persona = {
+    nombre: "Carlos",
+    edad: 25,
+    ciudad: "Panamá"
+};
+console.log("Propiedades de persona:");
+for (let propiedad in persona) {
+    console.log(`${propiedad}: ${persona[propiedad]}`);
+}
+
+// BREAK Y CONTINUE
+console.log("\n=== BREAK Y CONTINUE ===");
+console.log("Números del 1 al 10 (saltando el 5, parando en 8):");
+for (let i = 1; i <= 10; i++) {
+    if (i === 5) {
+        continue; // Saltar esta iteración
+    }
+    if (i === 8) {
+        break; // Salir del loop
+    }
+    console.log(i);
+}
+
+// EJEMPLO PRÁCTICO: Adivina el número
+console.log("\n=== JUEGO: ADIVINA EL NÚMERO ===");
+let numeroSecreto = Math.floor(Math.random() * 10) + 1;
+let intentos = 3;
+console.log("Adivina un número del 1 al 10. Tienes 3 intentos.");
+
+// Simulamos intentos
+let intentosUsuario = [5, 7, numeroSecreto]; // El último es el correcto
+
+for (let i = 0; i < intentos; i++) {
+    let intento = intentosUsuario[i];
+    console.log(`Intento ${i + 1}: ${intento}`);
+    
+    if (intento === numeroSecreto) {
+        console.log("¡Felicidades! ¡Adivinaste!");
+        break;
+    } else if (intento < numeroSecreto) {
+        console.log("El número es mayor");
+    } else {
+        console.log("El número es menor");
+    }
+    
+    if (i === intentos - 1 && intento !== numeroSecreto) {
+        console.log(`Game Over. El número era ${numeroSecreto}`);
+    }
+}</div>
+                    </div>
+                    
+                    <div class="output">
+                        <div class="output-header">
+                            <span>📺 Consola</span>
+                        </div>
+                        <div class="output-content" id="control-output"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="runCode('control')">▶️ Ejecutar Código</button>
+            </div>
+            
+            <!-- Funciones -->
+            <div class="section" id="functions">
+                <h2>⚙️ Funciones</h2>
+                
+                <div class="info-box">
+                    <h3>🔨 Bloques de Código Reutilizables</h3>
+                    <p>Las funciones son bloques de código que puedes definir una vez y usar muchas veces.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">funciones.js</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="functions-code">// FUNCIÓN BÁSICA
+console.log("=== FUNCIONES BÁSICAS ===");
+function saludar() {
+    console.log("¡Hola desde una función!");
+}
+
+saludar(); // Llamar la función
+
+// FUNCIÓN CON PARÁMETROS
+function saludarPersona(nombre) {
+    console.log(`¡Hola, ${nombre}!`);
+}
+
+saludarPersona("Ana");
+saludarPersona("Carlos");
+
+// FUNCIÓN CON MÚLTIPLES PARÁMETROS
+function sumar(a, b) {
+    let resultado = a + b;
+    console.log(`${a} + ${b} = ${resultado}`);
+    return resultado;
+}
+
+let suma = sumar(5, 3);
+console.log("Resultado guardado:", suma);
+
+// FUNCIÓN CON VALORES POR DEFECTO
+function presentarse(nombre = "Invitado", edad = 0) {
+    console.log(`Me llamo ${nombre} y tengo ${edad} años`);
+}
+
+presentarse("Juan", 25);
+presentarse("María"); // Usa edad por defecto
+presentarse(); // Usa ambos valores por defecto
+
+// FUNCIÓN EXPRESIÓN
+console.log("\n=== FUNCIÓN EXPRESIÓN ===");
+const multiplicar = function(a, b) {
+    return a * b;
+};
+
+console.log("5 × 4 =", multiplicar(5, 4));
+
+// ARROW FUNCTIONS (FUNCIONES FLECHA)
+console.log("\n=== ARROW FUNCTIONS ===");
+// Sintaxis básica
+const dividir = (a, b) => {
+    return a / b;
+};
+
+// Sintaxis simplificada (return implícito)
+const restar = (a, b) => a - b;
+
+// Un solo parámetro (sin paréntesis)
+const duplicar = n => n * 2;
+
+// Sin parámetros
+const obtenerPi = () => 3.14159;
+
+console.log("20 ÷ 4 =", dividir(20, 4));
+console.log("10 - 3 =", restar(10, 3));
+console.log("Duplicar 7 =", duplicar(7));
+console.log("PI =", obtenerPi());
+
+// FUNCIONES DE ORDEN SUPERIOR
+console.log("\n=== FUNCIONES DE ORDEN SUPERIOR ===");
+function operacion(a, b, callback) {
+    let resultado = callback(a, b);
+    console.log(`Resultado de la operación: ${resultado}`);
+    return resultado;
+}
+
+operacion(10, 5, sumar);
+operacion(10, 5, multiplicar);
+operacion(10, 5, (x, y) => x - y); // Función anónima
+
+// SCOPE (ALCANCE)
+console.log("\n=== SCOPE ===");
+let variableGlobal = "Soy global";
+
+function testScope() {
+    let variableLocal = "Soy local";
+    console.log("Dentro de la función:");
+    console.log("  - " + variableGlobal); // Puede acceder
+    console.log("  - " + variableLocal);  // Puede acceder
+}
+
+testScope();
+console.log("Fuera de la función:");
+console.log("  - " + variableGlobal); // Puede acceder
+// console.log(variableLocal); // Error! No puede acceder
+
+// CLOSURES
+console.log("\n=== CLOSURES ===");
+function crearContador() {
+    let contador = 0;
+    
+    return function() {
+        contador++;
+        return contador;
+    };
+}
+
+const miContador = crearContador();
+console.log("Contador:", miContador()); // 1
+console.log("Contador:", miContador()); // 2
+console.log("Contador:", miContador()); // 3
+
+// RECURSIÓN
+console.log("\n=== RECURSIÓN ===");
+function factorial(n) {
+    if (n <= 1) {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+
+console.log("Factorial de 5:", factorial(5));
+console.log("Factorial de 3:", factorial(3));
+
+// EJEMPLO PRÁCTICO: Calculadora
+console.log("\n=== CALCULADORA ===");
+const calculadora = {
+    sumar: (a, b) => a + b,
+    restar: (a, b) => a - b,
+    multiplicar: (a, b) => a * b,
+    dividir: (a, b) => b !== 0 ? a / b : "Error: División por cero"
+};
+
+console.log("10 + 5 =", calculadora.sumar(10, 5));
+console.log("10 - 5 =", calculadora.restar(10, 5));
+console.log("10 × 5 =", calculadora.multiplicar(10, 5));
+console.log("10 ÷ 5 =", calculadora.dividir(10, 5));
+console.log("10 ÷ 0 =", calculadora.dividir(10, 0));</div>
+                    </div>
+                    
+                    <div class="output">
+                        <div class="output-header">
+                            <span>📺 Consola</span>
+                        </div>
+                        <div class="output-content" id="functions-output"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="runCode('functions')">▶️ Ejecutar Código</button>
+            </div>
+            
+            <!-- Arrays -->
+            <div class="section" id="arrays">
+                <h2>📋 Arrays</h2>
+                
+                <div class="info-box">
+                    <h3>📚 Listas de Elementos</h3>
+                    <p>Los arrays son estructuras de datos que permiten almacenar múltiples valores en una sola variable.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">arrays.js</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="arrays-code">// CREAR ARRAYS
+console.log("=== CREAR ARRAYS ===");
+let frutas = ["Manzana", "Banana", "Naranja"];
+let numeros = [1, 2, 3, 4, 5];
+let mixto = ["Texto", 123, true, null];
+let vacio = [];
+
+console.log("Frutas:", frutas);
+console.log("Números:", numeros);
+console.log("Mixto:", mixto);
+console.log("Vacío:", vacio);
+
+// ACCEDER A ELEMENTOS
+console.log("\n=== ACCEDER A ELEMENTOS ===");
+console.log("Primera fruta:", frutas[0]);
+console.log("Segunda fruta:", frutas[1]);
+console.log("Última fruta:", frutas[frutas.length - 1]);
+
+// MODIFICAR ELEMENTOS
+console.log("\n=== MODIFICAR ELEMENTOS ===");
+frutas[1] = "Pera";
+console.log("Array modificado:", frutas);
+
+// MÉTODOS BÁSICOS
+console.log("\n=== MÉTODOS BÁSICOS ===");
+// push() - Añadir al final
+frutas.push("Uva");
+console.log("Después de push:", frutas);
+
+// pop() - Eliminar del final
+let ultimaFruta = frutas.pop();
+console.log("Fruta eliminada:", ultimaFruta);
+console.log("Array actual:", frutas);
+
+// unshift() - Añadir al inicio
+frutas.unshift("Fresa");
+console.log("Después de unshift:", frutas);
+
+// shift() - Eliminar del inicio
+let primeraFruta = frutas.shift();
+console.log("Fruta eliminada:", primeraFruta);
+console.log("Array actual:", frutas);
+
+// MÉTODOS DE BÚSQUEDA
+console.log("\n=== MÉTODOS DE BÚSQUEDA ===");
+let colores = ["rojo", "verde", "azul", "amarillo", "verde"];
+
+console.log("Array de colores:", colores);
+console.log("indexOf('verde'):", colores.indexOf("verde"));
+console.log("lastIndexOf('verde'):", colores.lastIndexOf("verde"));
+console.log("includes('azul'):", colores.includes("azul"));
+console.log("includes('negro'):", colores.includes("negro"));
+
+// MÉTODOS DE TRANSFORMACIÓN
+console.log("\n=== MÉTODOS DE TRANSFORMACIÓN ===");
+// slice() - Copiar parte del array
+let algunasFrutas = frutas.slice(0, 2);
+console.log("slice(0, 2):", algunasFrutas);
+console.log("Array original:", frutas);
+
+// splice() - Modificar array
+let meses = ["Ene", "Feb", "Abr", "May"];
+meses.splice(2, 0, "Mar"); // Insertar "Mar" en posición 2
+console.log("Después de splice:", meses);
+
+// concat() - Unir arrays
+let arr1 = [1, 2, 3];
+let arr2 = [4, 5, 6];
+let combinado = arr1.concat(arr2);
+console.log("Arrays combinados:", combinado);
+
+// join() - Convertir a string
+let palabras = ["Hola", "mundo", "desde", "JavaScript"];
+console.log("join(' '):", palabras.join(" "));
+console.log("join('-'):", palabras.join("-"));
+
+// MÉTODOS DE ITERACIÓN
+console.log("\n=== MÉTODOS DE ITERACIÓN ===");
+let nums = [1, 2, 3, 4, 5];
+
+// forEach() - Ejecutar función para cada elemento
+console.log("forEach:");
+nums.forEach((num, index) => {
+    console.log(`  Índice ${index}: ${num}`);
+});
+
+// map() - Transformar elementos
+let dobles = nums.map(num => num * 2);
+console.log("map (duplicar):", dobles);
+
+// filter() - Filtrar elementos
+let pares = nums.filter(num => num % 2 === 0);
+console.log("filter (pares):", pares);
+
+// reduce() - Reducir a un solo valor
+let suma = nums.reduce((total, num) => total + num, 0);
+console.log("reduce (suma):", suma);
+
+// find() - Encontrar primer elemento
+let mayorQueTres = nums.find(num => num > 3);
+console.log("find (>3):", mayorQueTres);
+
+// some() - Al menos uno cumple
+let hayPares = nums.some(num => num % 2 === 0);
+console.log("some (hay pares?):", hayPares);
+
+// every() - Todos cumplen
+let todosPositivos = nums.every(num => num > 0);
+console.log("every (todos positivos?):", todosPositivos);
+
+// ORDENAMIENTO
+console.log("\n=== ORDENAMIENTO ===");
+let desordenado = [3, 1, 4, 1, 5, 9, 2, 6];
+console.log("Array original:", desordenado);
+
+// sort() - Ordenar (modifica el array original)
+desordenado.sort();
+console.log("Ordenado:", desordenado);
+
+// Ordenar números correctamente
+desordenado.sort((a, b) => a - b);
+console.log("Ordenado numérico:", desordenado);
+
+// reverse() - Invertir
+desordenado.reverse();
+console.log("Invertido:", desordenado);
+
+// EJEMPLO PRÁCTICO: Lista de Tareas
+console.log("\n=== EJEMPLO: LISTA DE TAREAS ===");
+let tareas = [];
+
+// Añadir tareas
+tareas.push({ id: 1, texto: "Estudiar JavaScript", completada: false });
+tareas.push({ id: 2, texto: "Hacer ejercicios", completada: true });
+tareas.push({ id: 3, texto: "Leer documentación", completada: false });
+
+console.log("Todas las tareas:", tareas);
+
+// Filtrar tareas completadas
+let tareasCompletadas = tareas.filter(t => t.completada);
+console.log("Tareas completadas:", tareasCompletadas);
+
+// Filtrar tareas pendientes
+let tareasPendientes = tareas.filter(t => !t.completada);
+console.log("Tareas pendientes:", tareasPendientes);</div>
+                    </div>
+                    
+                    <div class="output">
+                        <div class="output-header">
+                            <span>📺 Consola</span>
+                        </div>
+                        <div class="output-content" id="arrays-output"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="runCode('arrays')">▶️ Ejecutar Código</button>
+            </div>
+            
+            <!-- Objetos -->
+            <div class="section" id="objects">
+                <h2>📘 Objetos</h2>
+                
+                <div class="info-box">
+                    <h3>🏠 Estructuras de Datos Complejas</h3>
+                    <p>Los objetos permiten agrupar datos relacionados y funcionalidad en una sola entidad.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">objetos.js</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="objects-code">// CREAR OBJETOS
+console.log("=== CREAR OBJETOS ===");
+// Objeto literal
+let persona = {
+    nombre: "Juan",
+    edad: 25,
+    ciudad: "Panamá",
+    activo: true
+};
+
+console.log("Objeto persona:", persona);
+
+// ACCEDER A PROPIEDADES
+console.log("\n=== ACCEDER A PROPIEDADES ===");
+// Notación de punto
+console.log("Nombre:", persona.nombre);
+console.log("Edad:", persona.edad);
+
+// Notación de corchetes
+console.log("Ciudad:", persona["ciudad"]);
+let prop = "activo";
+console.log("Activo:", persona[prop]);
+
+// MODIFICAR PROPIEDADES
+console.log("\n=== MODIFICAR PROPIEDADES ===");
+persona.edad = 26;
+persona["ciudad"] = "David";
+console.log("Persona modificada:", persona);
+
+// AÑADIR PROPIEDADES
+persona.email = "juan@email.com";
+persona.telefono = "6000-0000";
+console.log("Con nuevas propiedades:", persona);
+
+// ELIMINAR PROPIEDADES
+delete persona.telefono;
+console.log("Sin teléfono:", persona);
+
+// MÉTODOS EN OBJETOS
+console.log("\n=== MÉTODOS EN OBJETOS ===");
+let estudiante = {
+    nombre: "María",
+    notas: [85, 90, 88, 92],
+    
+    // Método
+    calcularPromedio: function() {
+        let suma = this.notas.reduce((a, b) => a + b, 0);
+        return suma / this.notas.length;
+    },
+    
+    // Método con sintaxis corta
+    presentarse() {
+        return `Hola, soy ${this.nombre}`;
+    }
+};
+
+console.log(estudiante.presentarse());
+console.log("Promedio:", estudiante.calcularPromedio());
+
+// OBJETOS ANIDADOS
+console.log("\n=== OBJETOS ANIDADOS ===");
+let empresa = {
+    nombre: "Tech Solutions",
+    direccion: {
+        calle: "Calle 50",
+        ciudad: "Panamá",
+        pais: "Panamá"
+    },
+    empleados: [
+        { nombre: "Ana", cargo: "CEO" },
+        { nombre: "Carlos", cargo: "CTO" },
+        { nombre: "Luis", cargo: "Developer" }
+    ]
+};
+
+console.log("Empresa:", empresa.nombre);
+console.log("Ciudad:", empresa.direccion.ciudad);
+console.log("Primer empleado:", empresa.empleados[0].nombre);
+
+// DESESTRUCTURACIÓN
+console.log("\n=== DESESTRUCTURACIÓN ===");
+let { nombre, edad, ciudad } = persona;
+console.log(`Desestructurado: ${nombre}, ${edad}, ${ciudad}`);
+
+// Con alias
+let { nombre: nombrePersona, edad: edadPersona } = persona;
+console.log(`Con alias: ${nombrePersona}, ${edadPersona}`);
+
+// OBJECT METHODS
+console.log("\n=== OBJECT METHODS ===");
+// Object.keys()
+console.log("Keys:", Object.keys(persona));
+
+// Object.values()
+console.log("Values:", Object.values(persona));
+
+// Object.entries()
+console.log("Entries:", Object.entries(persona));
+
+// Object.assign() - Copiar objetos
+let copia = Object.assign({}, persona);
+console.log("Copia:", copia);
+
+// Spread operator
+let otraCopia = { ...persona };
+console.log("Copia con spread:", otraCopia);
+
+// CLASES (ES6)
+console.log("\n=== CLASES ===");
+class Vehiculo {
+    constructor(marca, modelo, año) {
+        this.marca = marca;
+        this.modelo = modelo;
+        this.año = año;
+    }
+    
+    descripcion() {
+        return `${this.marca} ${this.modelo} (${this.año})`;
+    }
+    
+    arrancar() {
+        return `El ${this.modelo} está arrancando...`;
+    }
+}
+
+let miAuto = new Vehiculo("Toyota", "Corolla", 2020);
+console.log("Mi auto:", miAuto.descripcion());
+console.log(miAuto.arrancar());
+
+// HERENCIA
+class Moto extends Vehiculo {
+    constructor(marca, modelo, año, tipo) {
+        super(marca, modelo, año);
+        this.tipo = tipo;
+    }
+    
+    hacerWheely() {
+        return `La ${this.tipo} está haciendo un wheely!`;
+    }
+}
+
+let miMoto = new Moto("Honda", "CBR", 2021, "Deportiva");
+console.log("Mi moto:", miMoto.descripcion());
+console.log(miMoto.hacerWheely());
+
+// THIS
+console.log("\n=== THIS ===");
+let juego = {
+    titulo: "Super Mario",
+    año: 1985,
+    
+    info: function() {
+        console.log(`${this.titulo} (${this.año})`);
+    },
+    
+    // Arrow function no tiene su propio this
+    infoArrow: () => {
+        console.log("Arrow function - this:", this);
+    }
+};
+
+juego.info();
+// juego.infoArrow(); // this será undefined o window
+
+// EJEMPLO PRÁCTICO: Sistema de Inventario
+console.log("\n=== EJEMPLO: INVENTARIO ===");
+let inventario = {
+    productos: [
+        { id: 1, nombre: "Laptop", precio: 800, stock: 5 },
+        { id: 2, nombre: "Mouse", precio: 20, stock: 50 },
+        { id: 3, nombre: "Teclado", precio: 50, stock: 20 }
+    ],
+    
+    agregarProducto(producto) {
+        this.productos.push(producto);
+        console.log(`Producto ${producto.nombre} agregado`);
+    },
+    
+    buscarProducto(id) {
+        return this.productos.find(p => p.id === id);
+    },
+    
+    valorTotal() {
+        return this.productos.reduce((total, p) => {
+            return total + (p.precio * p.stock);
+        }, 0);
+    }
+};
+
+console.log("Productos:", inventario.productos);
+console.log("Buscar producto ID 2:", inventario.buscarProducto(2));
+console.log("Valor total del inventario: $", inventario.valorTotal());</div>
+                    </div>
+                    
+                    <div class="output">
+                        <div class="output-header">
+                            <span>📺 Consola</span>
+                        </div>
+                        <div class="output-content" id="objects-output"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="runCode('objects')">▶️ Ejecutar Código</button>
+            </div>
+            
+            <!-- DOM -->
+            <div class="section" id="dom">
+                <h2>🌐 DOM - Document Object Model</h2>
+                
+                <div class="info-box">
+                    <h3>🏗️ Manipulación del HTML</h3>
+                    <p>El DOM permite a JavaScript interactuar con elementos HTML y modificar la página web dinámicamente.</p>
+                </div>
+                
+                <div class="interactive-element">
+                    <h3>Demo DOM Interactiva</h3>
+                    <div id="dom-demo" style="padding: 20px; background: #f3f4f6; border-radius: 8px;">
+                        <h4 id="demo-title">Título Original</h4>
+                        <p id="demo-text">Este es un párrafo de ejemplo.</p>
+                        <button id="demo-btn" class="demo-button">Haz clic aquí</button>
+                        <div id="demo-result" style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px; min-height: 50px;">
+                            Resultado aparecerá aquí...
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">dom.js</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="dom-code">// SELECCIONAR ELEMENTOS
+console.log("=== SELECCIONAR ELEMENTOS ===");
+
+// getElementById
+let titulo = document.getElementById('demo-title');
+console.log("Título encontrado:", titulo.textContent);
+
+// querySelector (selecciona el primero)
+let parrafo = document.querySelector('#demo-text');
+console.log("Párrafo:", parrafo.textContent);
+
+// querySelectorAll (selecciona todos)
+let botones = document.querySelectorAll('.demo-button');
+console.log("Cantidad de botones:", botones.length);
+
+// MODIFICAR CONTENIDO
+console.log("\n=== MODIFICAR CONTENIDO ===");
+// Cambiar texto
+titulo.textContent = "¡Título Modificado con JS!";
+console.log("Título cambiado a:", titulo.textContent);
+
+// Cambiar HTML
+let resultado = document.getElementById('demo-result');
+resultado.innerHTML = '<strong>¡Contenido actualizado!</strong>';
+
+// MODIFICAR ESTILOS
+console.log("\n=== MODIFICAR ESTILOS ===");
+titulo.style.color = '#f59e0b';
+titulo.style.fontSize = '1.5em';
+titulo.style.textAlign = 'center';
+
+parrafo.style.backgroundColor = '#fef3c7';
+parrafo.style.padding = '15px';
+parrafo.style.borderRadius = '8px';
+
+// MODIFICAR CLASES
+console.log("\n=== CLASES CSS ===");
+// Añadir clase
+parrafo.classList.add('destacado');
+
+// Eliminar clase
+// parrafo.classList.remove('destacado');
+
+// Toggle (alternar)
+// parrafo.classList.toggle('activo');
+
+// Verificar si tiene clase
+console.log("¿Tiene clase 'destacado'?", parrafo.classList.contains('destacado'));
+
+// MODIFICAR ATRIBUTOS
+console.log("\n=== ATRIBUTOS ===");
+let boton = document.getElementById('demo-btn');
+boton.setAttribute('title', 'Este es un tooltip');
+boton.setAttribute('data-contador', '0');
+
+// CREAR ELEMENTOS
+console.log("\n=== CREAR ELEMENTOS ===");
+// Crear nuevo elemento
+let nuevoElemento = document.createElement('div');
+nuevoElemento.textContent = 'Soy un elemento nuevo';
+nuevoElemento.style.backgroundColor = '#dbeafe';
+nuevoElemento.style.padding = '10px';
+nuevoElemento.style.marginTop = '10px';
+nuevoElemento.style.borderRadius = '8px';
+
+// Añadir al DOM
+resultado.appendChild(nuevoElemento);
+
+// Crear lista dinámica
+let lista = document.createElement('ul');
+let items = ['JavaScript', 'HTML', 'CSS'];
+
+items.forEach(item => {
+    let li = document.createElement('li');
+    li.textContent = item;
+    li.style.marginLeft = '20px';
+    lista.appendChild(li);
+});
+
+resultado.appendChild(lista);
+
+// EVENT LISTENERS
+console.log("\n=== EVENTOS ===");
+let contador = 0;
+
+boton.addEventListener('click', function() {
+    contador++;
+    console.log(`Botón clickeado ${contador} veces`);
+    
+    // Actualizar el contador en el botón
+    this.textContent = `Clicks: ${contador}`;
+    this.setAttribute('data-contador', contador);
+    
+    // Cambiar color según contador
+    if (contador % 2 === 0) {
+        this.style.backgroundColor = '#10b981';
+    } else {
+        this.style.backgroundColor = '#f59e0b';
+    }
+    
+    // Mostrar mensaje
+    let mensaje = document.createElement('p');
+    mensaje.textContent = `Click #${contador} - ${new Date().toLocaleTimeString()}`;
+    mensaje.style.animation = 'fadeIn 0.5s';
+    resultado.appendChild(mensaje);
+    
+    // Limitar mensajes a los últimos 5
+    let mensajes = resultado.querySelectorAll('p');
+    if (mensajes.length > 5) {
+        mensajes[0].remove();
+    }
+});
+
+// Evento hover
+titulo.addEventListener('mouseenter', function() {
+    this.style.transform = 'scale(1.1)';
+    this.style.transition = 'transform 0.3s';
+});
+
+titulo.addEventListener('mouseleave', function() {
+    this.style.transform = 'scale(1)';
+});
+
+// EJEMPLO: Cambiar tema
+console.log("\n=== EJEMPLO: CAMBIAR TEMA ===");
+let temaBtn = document.createElement('button');
+temaBtn.textContent = '🌙 Modo Oscuro';
+temaBtn.className = 'demo-button';
+temaBtn.style.marginLeft = '10px';
+
+let demoDiv = document.getElementById('dom-demo');
+boton.parentElement.appendChild(temaBtn);
+
+let modoOscuro = false;
+temaBtn.addEventListener('click', function() {
+    modoOscuro = !modoOscuro;
+    
+    if (modoOscuro) {
+        demoDiv.style.backgroundColor = '#1e293b';
+        demoDiv.style.color = 'white';
+        this.textContent = '☀️ Modo Claro';
+    } else {
+        demoDiv.style.backgroundColor = '#f3f4f6';
+        demoDiv.style.color = 'black';
+        this.textContent = '🌙 Modo Oscuro';
+    }
+});
+
+console.log("✅ DOM manipulado con éxito");</div>
+                    </div>
+                    
+                    <div class="output">
+                        <div class="output-header">
+                            <span>📺 Consola</span>
+                        </div>
+                        <div class="output-content" id="dom-output"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="runCode('dom')">▶️ Ejecutar Código</button>
+            </div>
+            
+            <!-- Eventos -->
+            <div class="section" id="events">
+                <h2>🎯 Eventos</h2>
+                
+                <div class="info-box">
+                    <h3>⚡ Interacción con el Usuario</h3>
+                    <p>Los eventos permiten responder a las acciones del usuario como clicks, teclas presionadas, movimientos del mouse, etc.</p>
+                </div>
+                
+                <div class="interactive-element">
+                    <h3>Playground de Eventos</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <button id="event-click" class="demo-button">Click Me</button>
+                            <button id="event-dblclick" class="demo-button">Double Click</button>
+                            <div id="event-hover" style="padding: 20px; background: #e0e7ff; border-radius: 8px; text-align: center; margin: 10px 0;">
+                                Pasa el mouse aquí
+                            </div>
+                            <input type="text" id="event-input" placeholder="Escribe algo..." style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; margin: 10px 0;">
+                            <select id="event-select" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px;">
+                                <option value="">Selecciona una opción</option>
+                                <option value="opcion1">Opción 1</option>
+                                <option value="opcion2">Opción 2</option>
+                                <option value="opcion3">Opción 3</option>
+                            </select>
+                        </div>
+                        <div id="event-log" style="background: #1e293b; color: #10b981; padding: 15px; border-radius: 8px; font-family: monospace; height: 250px; overflow-y: auto;">
+                            Log de eventos...
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">eventos.js</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="events-code">// LOG DE EVENTOS
+let eventLog = document.getElementById('event-log');
+function logEvent(mensaje) {
+    let entry = document.createElement('div');
+    entry.textContent = `[${new Date().toLocaleTimeString()}] ${mensaje}`;
+    eventLog.appendChild(entry);
+    eventLog.scrollTop = eventLog.scrollHeight;
+    
+    // Limitar a 20 entradas
+    if (eventLog.children.length > 20) {
+        eventLog.removeChild(eventLog.firstChild);
+    }
+}
+
+// EVENTOS DE MOUSE
+console.log("=== EVENTOS DE MOUSE ===");
+
+// Click
+document.getElementById('event-click').addEventListener('click', function(e) {
+    logEvent('✓ Click detectado');
+    console.log("Evento click:", e);
+});
+
+// Doble click
+document.getElementById('event-dblclick').addEventListener('dblclick', function(e) {
+    logEvent('✓✓ Doble click detectado');
+    console.log("Doble click:", e);
+});
+
+// Mouse enter/leave
+let hoverDiv = document.getElementById('event-hover');
+hoverDiv.addEventListener('mouseenter', function() {
+    this.style.background = '#fef3c7';
+    this.textContent = '¡Mouse dentro!';
+    logEvent('→ Mouse entró al div');
+});
+
+hoverDiv.addEventListener('mouseleave', function() {
+    this.style.background = '#e0e7ff';
+    this.textContent = 'Pasa el mouse aquí';
+    logEvent('← Mouse salió del div');
+});
+
+// Mouse move (con throttle)
+let lastMove = 0;
+hoverDiv.addEventListener('mousemove', function(e) {
+    let now = Date.now();
+    if (now - lastMove > 100) { // Throttle a 100ms
+        let rect = this.getBoundingClientRect();
+        let x = Math.round(e.clientX - rect.left);
+        let y = Math.round(e.clientY - rect.top);
+        this.textContent = `Posición: X:${x}, Y:${y}`;
+        lastMove = now;
+    }
+});
+
+// EVENTOS DE TECLADO
+console.log("\n=== EVENTOS DE TECLADO ===");
+let input = document.getElementById('event-input');
+
+// Keydown
+input.addEventListener('keydown', function(e) {
+    logEvent(`⌨️ Tecla presionada: ${e.key} (código: ${e.keyCode})`);
+    
+    // Detectar teclas especiales
+    if (e.key === 'Enter') {
+        logEvent('↵ Enter presionado');
+        this.style.backgroundColor = '#dcfce7';
+    }
+    
+    if (e.ctrlKey && e.key === 's') {
+        e.preventDefault(); // Prevenir guardado del navegador
+        logEvent('💾 Ctrl+S detectado (guardado simulado)');
+    }
+});
+
+// Keyup
+input.addEventListener('keyup', function(e) {
+    if (e.key === 'Enter') {
+        this.style.backgroundColor = 'white';
+    }
+});
+
+// Input (cuando el valor cambia)
+input.addEventListener('input', function(e) {
+    logEvent(`✏️ Valor actual: "${this.value}"`);
+});
+
+// Focus y Blur
+input.addEventListener('focus', function() {
+    this.style.borderColor = '#f59e0b';
+    logEvent('🔍 Input enfocado');
+});
+
+input.addEventListener('blur', function() {
+    this.style.borderColor = '#e2e8f0';
+    logEvent('👋 Input perdió el foco');
+});
+
+// EVENTOS DE FORMULARIO
+console.log("\n=== EVENTOS DE FORMULARIO ===");
+let select = document.getElementById('event-select');
+
+select.addEventListener('change', function() {
+    logEvent(`📝 Opción seleccionada: ${this.value}`);
+    console.log("Valor seleccionado:", this.value);
+});
+
+// EVENTOS DE VENTANA
+console.log("\n=== EVENTOS DE VENTANA ===");
+
+// Resize (con debounce)
+let resizeTimeout;
+window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        logEvent(`📐 Ventana redimensionada: ${window.innerWidth}x${window.innerHeight}`);
+    }, 300);
+});
+
+// Scroll
+let scrollTimeout;
+window.addEventListener('scroll', function() {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        logEvent(`📜 Scroll: ${window.scrollY}px desde arriba`);
+    }, 100);
+});
+
+// DELEGACIÓN DE EVENTOS
+console.log("\n=== DELEGACIÓN DE EVENTOS ===");
+// Crear botones dinámicamente
+let buttonContainer = document.createElement('div');
+buttonContainer.style.marginTop = '20px';
+
+for (let i = 1; i <= 3; i++) {
+    let btn = document.createElement('button');
+    btn.textContent = `Botón ${i}`;
+    btn.className = 'demo-button';
+    btn.dataset.id = i;
+    buttonContainer.appendChild(btn);
+}
+
+hoverDiv.parentElement.appendChild(buttonContainer);
+
+// Un solo listener para todos los botones
+buttonContainer.addEventListener('click', function(e) {
+    if (e.target.classList.contains('demo-button')) {
+        let id = e.target.dataset.id;
+        logEvent(`🎯 Botón dinámico ${id} clickeado`);
+        e.target.style.backgroundColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+    }
+});
+
+// PREVENIR COMPORTAMIENTO POR DEFECTO
+console.log("\n=== PREVENIR COMPORTAMIENTO ===");
+let link = document.createElement('a');
+link.href = 'https://www.google.com';
+link.textContent = 'Link (no navegará)';
+link.style.display = 'block';
+link.style.marginTop = '10px';
+link.style.color = '#3b82f6';
+
+link.addEventListener('click', function(e) {
+    e.preventDefault(); // Prevenir navegación
+    logEvent('🔗 Link clickeado pero navegación prevenida');
+    console.log("Href del link:", this.href);
+});
+
+buttonContainer.appendChild(link);
+
+// CUSTOM EVENTS
+console.log("\n=== EVENTOS PERSONALIZADOS ===");
+// Crear evento personalizado
+let customEvent = new CustomEvent('miEvento', {
+    detail: { mensaje: 'Hola desde evento personalizado' }
+});
+
+// Escuchar evento personalizado
+document.addEventListener('miEvento', function(e) {
+    logEvent(`⚡ Evento personalizado: ${e.detail.mensaje}`);
+    console.log("Evento personalizado recibido:", e.detail);
+});
+
+// Disparar evento después de 2 segundos
+setTimeout(() => {
+    document.dispatchEvent(customEvent);
+}, 2000);
+
+logEvent('🚀 Sistema de eventos inicializado');</div>
+                    </div>
+                    
+                    <div class="output">
+                        <div class="output-header">
+                            <span>📺 Consola</span>
+                        </div>
+                        <div class="output-content" id="events-output"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="runCode('events')">▶️ Ejecutar Código</button>
+            </div>
+            
+            <!-- Asíncrono -->
+            <div class="section" id="async">
+                <h2>⏳ JavaScript Asíncrono</h2>
+                
+                <div class="info-box">
+                    <h3>🔄 Operaciones Asíncronas</h3>
+                    <p>JavaScript puede ejecutar código de forma asíncrona usando callbacks, promesas y async/await.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">async.js</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="async-code">// SETTIMEOUT
+console.log("=== SETTIMEOUT ===");
+console.log("1. Inicio");
+
+setTimeout(() => {
+    console.log("2. Mensaje después de 2 segundos");
+}, 2000);
+
+setTimeout(() => {
+    console.log("3. Mensaje después de 1 segundo");
+}, 1000);
+
+console.log("4. Fin");
+
+// SETINTERVAL
+console.log("\n=== SETINTERVAL ===");
+let contador = 0;
+let intervalo = setInterval(() => {
+    contador++;
+    console.log(`Intervalo: ${contador}`);
+    
+    if (contador >= 3) {
+        clearInterval(intervalo);
+        console.log("Intervalo detenido");
+    }
+}, 1000);
+
+// CALLBACKS
+console.log("\n=== CALLBACKS ===");
+function obtenerDatos(callback) {
+    console.log("Obteniendo datos...");
+    setTimeout(() => {
+        let datos = { id: 1, nombre: "Juan" };
+        callback(datos);
+    }, 1500);
+}
+
+obtenerDatos(function(resultado) {
+    console.log("Datos recibidos:", resultado);
+});
+
+// PROMESAS
+console.log("\n=== PROMESAS ===");
+function obtenerUsuario(id) {
+    return new Promise((resolve, reject) => {
+        console.log(`Buscando usuario ${id}...`);
+        setTimeout(() => {
+            if (id > 0) {
+                resolve({ 
+                    id: id, 
+                    nombre: "Ana", 
+                    email: "ana@email.com" 
+                });
+            } else {
+                reject("ID de usuario inválido");
+            }
+        }, 1000);
+    });
+}
+
+// Uso de promesa con then/catch
+obtenerUsuario(1)
+    .then(usuario => {
+        console.log("Usuario encontrado:", usuario);
+        return usuario.nombre;
+    })
+    .then(nombre => {
+        console.log("Nombre del usuario:", nombre);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    })
+    .finally(() => {
+        console.log("Operación completada");
+    });
+
+// ASYNC/AWAIT
+console.log("\n=== ASYNC/AWAIT ===");
+async function obtenerDatosAsync() {
+    try {
+        console.log("Iniciando operación async...");
+        
+        // Simular llamada a API
+        let response = await obtenerUsuario(2);
+        console.log("Respuesta async:", response);
+        
+        // Otra operación async
+        let detalles = await obtenerDetallesUsuario(response.id);
+        console.log("Detalles:", detalles);
+        
+    } catch (error) {
+        console.error("Error en async:", error);
+    }
+}
+
+function obtenerDetallesUsuario(userId) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve({
+                userId: userId,
+                permisos: ["leer", "escribir"],
+                ultimoAcceso: new Date().toISOString()
+            });
+        }, 800);
+    });
+}
+
+obtenerDatosAsync();
+
+// PROMISE.ALL
+console.log("\n=== PROMISE.ALL ===");
+let promesa1 = new Promise(resolve => {
+    setTimeout(() => resolve("Resultado 1"), 1000);
+});
+
+let promesa2 = new Promise(resolve => {
+    setTimeout(() => resolve("Resultado 2"), 1500);
+});
+
+let promesa3 = new Promise(resolve => {
+    setTimeout(() => resolve("Resultado 3"), 800);
+});
+
+Promise.all([promesa1, promesa2, promesa3])
+    .then(resultados => {
+        console.log("Todos los resultados:", resultados);
+    })
+    .catch(error => {
+        console.error("Error en alguna promesa:", error);
+    });
+
+// PROMISE.RACE
+console.log("\n=== PROMISE.RACE ===");
+Promise.race([promesa1, promesa2, promesa3])
+    .then(resultado => {
+        console.log("Primer resultado:", resultado);
+    });
+
+// FETCH API
+console.log("\n=== FETCH API ===");
+// Simulamos una API local
+async function ejemploFetch() {
+    try {
+        // En un caso real, usarías una URL real
+        console.log("Simulando fetch a API...");
+        
+        // Simulamos la respuesta
+        let response = await simularFetch();
+        let data = await response.json();
+        
+        console.log("Datos de la API:", data);
+        
+    } catch (error) {
+        console.error("Error en fetch:", error);
+    }
+}
+
+function simularFetch() {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve({
+                json: () => Promise.resolve({
+                    usuarios: [
+                        { id: 1, nombre: "Pedro" },
+                        { id: 2, nombre: "María" }
+                    ],
+                    total: 2,
+                    timestamp: new Date().toISOString()
+                })
+            });
+        }, 1200);
+    });
+}
+
+ejemploFetch();
+
+// EJEMPLO PRÁCTICO: Cargador de datos
+console.log("\n=== EJEMPLO: CARGADOR DE DATOS ===");
+class DataLoader {
+    constructor() {
+        this.cache = {};
+    }
+    
+    async cargarDatos(tipo) {
+        // Verificar cache
+        if (this.cache[tipo]) {
+            console.log(`Datos de ${tipo} desde cache`);
+            return this.cache[tipo];
+        }
+        
+        console.log(`Cargando datos de ${tipo}...`);
+        
+        // Simular carga de datos
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                let datos = {
+                    productos: [
+                        { id: 1, nombre: "Laptop", precio: 999 },
+                        { id: 2, nombre: "Mouse", precio: 25 }
+                    ],
+                    usuarios: [
+                        { id: 1, nombre: "Admin", rol: "admin" },
+                        { id: 2, nombre: "User", rol: "user" }
+                    ]
+                };
+                
+                this.cache[tipo] = datos[tipo];
+                resolve(datos[tipo]);
+            }, 1000);
+        });
+    }
+}
+
+let loader = new DataLoader();
+
+async function cargarTodo() {
+    try {
+        let productos = await loader.cargarDatos('productos');
+        console.log("Productos cargados:", productos);
+        
+        let usuarios = await loader.cargarDatos('usuarios');
+        console.log("Usuarios cargados:", usuarios);
+        
+        // Segunda carga (desde cache)
+        let productosCache = await loader.cargarDatos('productos');
+        console.log("Productos (cache):", productosCache);
+        
+    } catch (error) {
+        console.error("Error cargando datos:", error);
+    }
+}
+
+setTimeout(cargarTodo, 3000);</div>
+                    </div>
+                    
+                    <div class="output">
+                        <div class="output-header">
+                            <span>📺 Consola</span>
+                        </div>
+                        <div class="output-content" id="async-output"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="runCode('async')">▶️ Ejecutar Código</button>
+            </div>
+            
+            <!-- ES6+ -->
+            <div class="section" id="es6">
+                <h2>🚀 ES6+ Características Modernas</h2>
+                
+                <div class="info-box">
+                    <h3>✨ JavaScript Moderno</h3>
+                    <p>ES6 (ECMAScript 2015) y versiones posteriores añadieron muchas características poderosas a JavaScript.</p>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <span style="margin-left: 10px; color: #94a3b8;">es6.js</span>
+                        </div>
+                        <div class="code-area" contenteditable="true" id="es6-code">// TEMPLATE LITERALS
+console.log("=== TEMPLATE LITERALS ===");
+let nombre = "Carlos";
+let edad = 25;
+let mensaje = `Hola, me llamo ${nombre} y tengo ${edad} años.
+Este es un mensaje
+de múltiples líneas.`;
+console.log(mensaje);
+
+// Expresiones en templates
+console.log(`2 + 2 = ${2 + 2}`);
+console.log(`Es mayor de edad: ${edad >= 18 ? 'Sí' : 'No'}`);
+
+// DESTRUCTURING
+console.log("\n=== DESTRUCTURING ===");
+// Arrays
+let numeros = [1, 2, 3, 4, 5];
+let [primero, segundo, ...resto] = numeros;
+console.log("Primero:", primero);
+console.log("Segundo:", segundo);
+console.log("Resto:", resto);
+
+// Objetos
+let persona = {
+    nombre: "Ana",
+    edad: 30,
+    ciudad: "Panamá",
+    profesion: "Desarrolladora"
+};
+
+let { nombre: nombrePersona, edad: edadPersona, profesion } = persona;
+console.log(`${nombrePersona}, ${edadPersona} años, ${profesion}`);
+
+// En funciones
+function mostrarInfo({ nombre, edad }) {
+    console.log(`Info: ${nombre}, ${edad} años`);
+}
+mostrarInfo(persona);
+
+// SPREAD OPERATOR
+console.log("\n=== SPREAD OPERATOR ===");
+// Arrays
+let arr1 = [1, 2, 3];
+let arr2 = [4, 5, 6];
+let combinado = [...arr1, ...arr2];
+console.log("Arrays combinados:", combinado);
+
+// Copiar array
+let original = [1, 2, 3];
+let copia = [...original];
+copia.push(4);
+console.log("Original:", original);
+console.log("Copia:", copia);
+
+// Objetos
+let obj1 = { a: 1, b: 2 };
+let obj2 = { c: 3, d: 4 };
+let objCombinado = { ...obj1, ...obj2 };
+console.log("Objetos combinados:", objCombinado);
+
+// REST PARAMETERS
+console.log("\n=== REST PARAMETERS ===");
+function sumar(...numeros) {
+    return numeros.reduce((total, num) => total + num, 0);
+}
+
+console.log("Suma(1,2,3):", sumar(1, 2, 3));
+console.log("Suma(1,2,3,4,5):", sumar(1, 2, 3, 4, 5));
+
+// DEFAULT PARAMETERS
+console.log("\n=== DEFAULT PARAMETERS ===");
+function saludar(nombre = "Invitado", hora = new Date().getHours()) {
+    let saludo = hora < 12 ? "Buenos días" : "Buenas tardes";
+    console.log(`${saludo}, ${nombre}!`);
+}
+
+saludar();
+saludar("Pedro");
+saludar("María", 9);
+
+// ARROW FUNCTIONS
+console.log("\n=== ARROW FUNCTIONS ===");
+// Tradicional vs Arrow
+let tradicional = function(x) {
+    return x * 2;
+};
+
+let arrow = x => x * 2;
+
+console.log("Tradicional(5):", tradicional(5));
+console.log("Arrow(5):", arrow(5));
+
+// Con múltiples parámetros
+let sumaArrow = (a, b) => a + b;
+console.log("Suma arrow(3,4):", sumaArrow(3, 4));
+
+// MÉTODOS DE ARRAY MEJORADOS
+console.log("\n=== MÉTODOS DE ARRAY ES6+ ===");
+let usuarios = [
+    { id: 1, nombre: "Juan", edad: 25 },
+    { id: 2, nombre: "María", edad: 30 },
+    { id: 3, nombre: "Pedro", edad: 25 }
+];
+
+// find
+let usuario = usuarios.find(u => u.id === 2);
+console.log("Usuario encontrado:", usuario);
+
+// findIndex
+let indice = usuarios.findIndex(u => u.nombre === "Pedro");
+console.log("Índice de Pedro:", indice);
+
+// includes
+let frutas = ["manzana", "pera", "uva"];
+console.log("¿Incluye 'pera'?:", frutas.includes("pera"));
+
+// OPTIONAL CHAINING
+console.log("\n=== OPTIONAL CHAINING ===");
+let user = {
+    nombre: "Luis",
+    direccion: {
+        ciudad: "Panamá"
+    }
+};
+
+console.log("Ciudad:", user.direccion?.ciudad);
+console.log("País:", user.direccion?.pais ?? "No especificado");
+console.log("Código postal:", user.direccion?.codigoPostal?.valor ?? "N/A");
+
+// NULLISH COALESCING
+console.log("\n=== NULLISH COALESCING ===");
+let valor1 = null;
+let valor2 = 0;
+let valor3 = "";
+let valor4 = "Hola";
+
+console.log("null ?? 'default':", valor1 ?? "default");
+console.log("0 ?? 'default':", valor2 ?? "default");
+console.log("'' ?? 'default':", valor3 ?? "default");
+console.log("'Hola' ?? 'default':", valor4 ?? "default");
+
+// CLASES ES6
+console.log("\n=== CLASES ES6 ===");
+class Animal {
+    constructor(nombre, tipo) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+    }
+    
+    hablar() {
+        return `${this.nombre} hace un sonido`;
+    }
+    
+    static info() {
+        return "Los animales son seres vivos";
+    }
+}
+
+class Perro extends Animal {
+    constructor(nombre, raza) {
+        super(nombre, "Perro");
+        this.raza = raza;
+    }
+    
+    hablar() {
+        return `${this.nombre} ladra: ¡Guau!`;
+    }
+    
+    get descripcion() {
+        return `${this.nombre} es un ${this.tipo} de raza ${this.raza}`;
+    }
+    
+    set nuevaRaza(raza) {
+        this.raza = raza;
+    }
+}
+
+let miPerro = new Perro("Max", "Labrador");
+console.log(miPerro.hablar());
+console.log(miPerro.descripcion);
+console.log(Animal.info());
+
+// MAP Y SET
+console.log("\n=== MAP Y SET ===");
+// Map
+let mapa = new Map();
+mapa.set("nombre", "Juan");
+mapa.set("edad", 25);
+mapa.set(1, "Número uno");
+
+console.log("Map - nombre:", mapa.get("nombre"));
+console.log("Map - tamaño:", mapa.size);
+
+// Set
+let conjunto = new Set();
+conjunto.add(1);
+conjunto.add(2);
+conjunto.add(2); // No se añade duplicado
+conjunto.add(3);
+
+console.log("Set valores:", [...conjunto]);
+console.log("Set tamaño:", conjunto.size);
+
+// MÓDULOS (simulado)
+console.log("\n=== MÓDULOS ES6 ===");
+// export
+let exportar = {
+    PI: 3.14159,
+    sumar: (a, b) => a + b,
+    Usuario: class {
+        constructor(nombre) {
+            this.nombre = nombre;
+        }
+    }
+};
+
+// import (simulado)
+let { PI, sumar: suma, Usuario } = exportar;
+console.log("PI importado:", PI);
+console.log("Función importada:", suma(5, 3));
+let nuevoUsuario = new Usuario("Carmen");
+console.log("Clase importada:", nuevoUsuario);
+
+// SYMBOLS
+console.log("\n=== SYMBOLS ===");
+let sym1 = Symbol("id");
+let sym2 = Symbol("id");
+console.log("sym1 === sym2:", sym1 === sym2); // false
+
+let obj = {
+    [sym1]: "valor secreto"
+};
+console.log("Valor con symbol:", obj[sym1]);
+
+// ITERADORES
+console.log("\n=== ITERADORES ===");
+let iterableCustom = {
+    datos: [10, 20, 30],
+    [Symbol.iterator]() {
+        let index = 0;
+        return {
+            next: () => {
+                if (index < this.datos.length) {
+                    return { value: this.datos[index++], done: false };
+                }
+                return { done: true };
+            }
+        };
+    }
+};
+
+console.log("Iterador personalizado:");
+for (let valor of iterableCustom) {
+    console.log("  Valor:", valor);
+}</div>
+                    </div>
+                    
+                    <div class="output">
+                        <div class="output-header">
+                            <span>📺 Consola</span>
+                        </div>
+                        <div class="output-content" id="es6-output"></div>
+                    </div>
+                </div>
+                
+                <button class="run-btn" onclick="runCode('es6')">▶️ Ejecutar Código</button>
+                
+                <div class="tip">
+                    <h3>💡 Compatibilidad</h3>
+                    <p>La mayoría de navegadores modernos soportan ES6+. Para navegadores antiguos, puedes usar herramientas como Babel para transpilar el código.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Función para cambiar entre secciones
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Desactivar todos los tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Activar el tab correspondiente
+            event.target.classList.add('active');
+        }
+        
+        // Función para ejecutar código JavaScript
+        function runCode(section) {
+            const codeArea = document.getElementById(section + '-code');
+            const outputArea = document.getElementById(section + '-output');
+            
+            if (!codeArea || !outputArea) return;
+            
+            // Limpiar el output anterior
+            outputArea.innerHTML = '';
+            
+            // Capturar console.log
+            const originalLog = console.log;
+            const originalError = console.error;
+            const originalWarn = console.warn;
+            const originalInfo = console.info;
+            
+            const logToOutput = (message, type = 'log') => {
+                let color = '#10b981'; // Verde por defecto
+                let prefix = '';
+                
+                switch(type) {
+                    case 'error':
+                        color = '#ef4444';
+                        prefix = '❌ ';
+                        break;
+                    case 'warn':
+                        color = '#f59e0b';
+                        prefix = '⚠️ ';
+                        break;
+                    case 'info':
+                        color = '#3b82f6';
+                        prefix = 'ℹ️ ';
+                        break;
+                    default:
+                        prefix = '→ ';
+                }
+                
+                // Convertir argumentos a string
+                let output = Array.from(arguments).slice(0, -1).map(arg => {
+                    if (typeof arg === 'object') {
+                        return JSON.stringify(arg, null, 2);
+                    }
+                    return String(arg);
+                }).join(' ');
+                
+                outputArea.innerHTML += `<div style="color: ${color}; margin: 2px 0;">${prefix}${output}</div>`;
+                outputArea.scrollTop = outputArea.scrollHeight;
+            };
+            
+            // Sobrescribir console temporalmente
+            console.log = function() {
+                logToOutput(...arguments, 'log');
+                originalLog.apply(console, arguments);
+            };
+            
+            console.error = function() {
+                logToOutput(...arguments, 'error');
+                originalError.apply(console, arguments);
+            };
+            
+            console.warn = function() {
+                logToOutput(...arguments, 'warn');
+                originalWarn.apply(console, arguments);
+            };
+            
+            console.info = function() {
+                logToOutput(...arguments, 'info');
+                originalInfo.apply(console, arguments);
+            };
+            
+            try {
+                // Obtener el código
+                let code = codeArea.innerText || codeArea.textContent;
+                
+                // Para algunas secciones, modificar el comportamiento
+                if (section === 'basics') {
+                    // Reemplazar alert, prompt, confirm con versiones que solo hacen console.log
+                    code = code.replace(/alert\(/g, 'console.log("ALERT: " + ');
+                    code = code.replace(/prompt\(/g, 'console.log("PROMPT: " + ') + ' || "Usuario"';
+                    code = code.replace(/confirm\(/g, 'console.log("CONFIRM: " + ') + ' || true';
+                }
+                
+                // Ejecutar el código
+                eval(code);
+                
+                // Añadir mensaje de éxito
+                outputArea.innerHTML += '<div style="color: #10b981; margin-top: 10px; padding-top: 10px; border-top: 1px solid #334155;">✅ Código ejecutado correctamente</div>';
+                
+            } catch (error) {
+                outputArea.innerHTML += `<div style="color: #ef4444; margin-top: 10px;">❌ Error: ${error.message}</div>`;
+            } finally {
+                // Restaurar console
+                console.log = originalLog;
+                console.error = originalError;
+                console.warn = originalWarn;
+                console.info = originalInfo;
+            }
+        }
+        
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hacer editables los code areas
+            const codeAreas = document.querySelectorAll('.code-area');
+            codeAreas.forEach(area => {
+                area.addEventListener('keydown', function(e) {
+                    if (e.key === 'Tab') {
+                        e.preventDefault();
+                        document.execCommand('insertHTML', false, '    ');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
