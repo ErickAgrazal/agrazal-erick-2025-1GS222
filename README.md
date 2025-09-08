@@ -22,6 +22,9 @@ Al completar este curso podrán:
 plan_de_contenido.pdf    # Plan detallado del curso
 laboratorios/            # Prácticas y ejercicios semanales
 parciales/               # Exámenes parciales
+grupos/                  # Información de grupos de trabajo
+├── 221.md              # Grupos del salón 221
+└── 222.md              # Grupos del salón 222
 docs/                    # Documentación técnica
 ├── 01-html/            # Guía práctica de HTML
 ├── 02-css/             # Guía práctica de CSS
@@ -31,6 +34,8 @@ docs/                    # Documentación técnica
 ## Cómo usar este repositorio
 
 Primero, revisen el archivo `plan_de_contenido.pdf` para entender la estructura completa del curso. Luego, la carpeta `docs/` contiene toda la documentación técnica que necesitarán, organizada por tecnología. Los laboratorios están diseñados para practicar lo aprendido cada semana, y los parciales... bueno, ya saben para qué son.
+
+La carpeta `grupos/` contiene la información de los equipos de trabajo organizados por salón. Cada archivo incluye los grupos formados, sus integrantes y los temas asignados para las presentaciones del curso.
 
 ## Contenido del Curso
 
@@ -47,6 +52,12 @@ Aquí es donde las cosas se ponen interesantes. JavaScript les permitirá hacer 
 
 La mejor forma de aprender a programar es programando. Por eso, cada tema nuevo vendrá acompañado de ejemplos que pueden ejecutar inmediatamente y ejercicios para resolver. No se limiten a copiar código; experimenten, rompan cosas, y vuelvan a armarlas. Así es como realmente se aprende.
 
+### Dinámica de Laboratorios
+
+Los laboratorios están diseñados para ser experiencias de aprendizaje integral. Cada uno combina práctica e investigación, donde ustedes son protagonistas activos de su propio aprendizaje. La idea es que utilicen tanto la documentación proporcionada como recursos adicionales que encuentren por su cuenta para resolver los desafíos planteados.
+
+Después de cada entrega, dedicaremos la siguiente clase a analizar juntos las soluciones. Este será un espacio valioso para comparar diferentes enfoques, aclarar dudas y profundizar en los conceptos. El objetivo es fomentar el pensamiento crítico y la resolución creativa de problemas, habilidades fundamentales en el desarrollo web profesional.
+
 ## Herramientas Necesarias
 
 Para este curso necesitarán:
@@ -62,6 +73,10 @@ La nota final se calcula así:
 - Proyecto Final: 30%
 
 Los laboratorios son semanales y evalúan la práctica continua. Los parciales evalúan comprensión de conceptos. El proyecto final es donde demostrarán todo lo aprendido integrando las tres tecnologías.
+
+### Trabajo en Equipo
+
+El curso incluye presentaciones grupales sobre temas de tecnologías web modernas. Los grupos están organizados por salón y pueden consultar su asignación en la carpeta `grupos/`. Cada equipo debe preparar y exponer su tema asignado siguiendo las pautas establecidas en clase.
 
 ## Recomendaciones
 
