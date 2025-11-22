@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio #7</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+        button {
+            padding: 2px 5px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        button:hover {
+            border: 1px solid red;
+        }
+
+        .red {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Ejemplo de JS</h1>
+    <form action="">
+        <label for="">Nombre</label>
+        <input type="text">
+        <button>Guardar</button>
+    </form>
+    <div id="response"></div>
+    <script>
+        const form = document.querySelector('form');
+        const input = document.querySelector('input');
+        const response = document.querySelector('#response');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+            const nombre = input.value;
+            response.textContent = `El nombre es: ${nombre}`;
+        })
+    </script>
+</body>
+
+</html>

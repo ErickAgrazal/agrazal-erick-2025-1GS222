@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: black;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            margin: 20px auto;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ejemplo de JS</h1>
+    <form action="">
+        <label for="">Nombre</label>
+        <input type="text">
+        <button>Enviar</button>
+    </form>
+    <div id="response"></div>
+    <script>
+        const form = document.querySelector("form");
+        const response = document.querySelector("#response");
+        const input = document.querySelector("input");
+        function handleSubmit(e) {
+            e.preventDefault();
+            const nombre = input.value;
+            response.innerHTML += `<p>Hola, ${nombre}</p>`;
+        }
+        form.addEventListener("submit", handleSubmit);
+    </script>
+</body>
+</html>

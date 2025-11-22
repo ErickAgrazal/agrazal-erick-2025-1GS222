@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: black;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            margin: 20px auto;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ejemplo de JS</h1>
+    <form action="">
+        <label for="">Nombre</label>
+        <input type="text">
+        <button>Enviar</button>
+    </form>
+    <div id="counter">0</div>
+    <div id="response"></div>
+    <script>
+        const form = document.querySelector("form");
+        const response = document.querySelector("#response");
+        const input = document.querySelector("input");
+        const counter = document.querySelector("#counter");
+        function handleSubmit(e) {
+            e.preventDefault();
+            const nombre = input.value;
+            response.innerHTML += `<p>Hola, ${nombre}<button class="delete">Eliminar</button></p>`;
+            const buttons = response.querySelectorAll(".delete");
+            buttons.forEach(button => {
+                button.addEventListener("click", (e) => {
+                    e.target.closest("p").remove();
+                    counter.textContent = response.children.length;
+                });
+            });
+            counter.textContent = response.children.length;
+        }
+        form.addEventListener("submit", handleSubmit);
+    </script>
+</body>
+</html>

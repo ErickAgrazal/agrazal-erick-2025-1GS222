@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio #7</title>
+  <style>
+    button {
+      padding: 2px 5px;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+    button:hover {
+      border: 1px solid red;
+    }
+    .red {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ejemplo de JS</h1>
+  <span>
+  </span>
+  <button>Color rojo</button>
+  <script>
+    const name = "Erick Agrazal";
+    const message = `Hola, mi nombre es ${name}`;
+    console.log(message);
+
+    document.querySelector("span").textContent = message
+    document.querySelector("button").addEventListener("click", () => {
+      document.querySelector("span").classList.toggle("red");
+    });
+
+    function suma(a, b) {
+      return a + b;
+    }
+    suma;
+  </script> 
+</body>
+</html>

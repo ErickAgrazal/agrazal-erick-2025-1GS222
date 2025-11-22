@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Elemento</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --glass-white: rgba(255, 255, 255, 0.45);
+            --glass-strong: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-highlight: rgba(255, 255, 255, 0.75);
+            --text-dark: #0f172a;
+            --accent-cyan: #67e8f9;
+            --accent-purple: #a855f7;
+            --accent-blue: #3b82f6;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, #0f172a 0%, #020617 40%),
+                        radial-gradient(circle at bottom right, #1d267d 0%, #111125 45%);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: clamp(1.5rem, 5vw, 3.5rem);
+            color: var(--text-dark);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.6;
+            z-index: 0;
+        }
+
+        body::before {
+            top: 5%;
+            right: 10%;
+            background: var(--accent-purple);
+        }
+
+        body::after {
+            bottom: 0;
+            left: 0;
+            background: var(--accent-cyan);
+        }
+
+        h1 {
+            position: relative;
+            color: #fff;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            margin: 0 0 2.5rem;
+            letter-spacing: -0.05em;
+            z-index: 1;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        h1::after {
+            content: "";
+            display: block;
+            height: 4px;
+            width: 120px;
+            margin-top: 18px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            border-radius: 999px;
+        }
+
+        form {
+            position: relative;
+            z-index: 1;
+            margin: 0 0 2.5rem;
+            width: 100%;
+            max-width: 640px;
+            padding: 32px;
+            border-radius: 28px;
+            background: var(--glass-white);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 30px 80px rgba(15, 23, 42, 0.35);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        label {
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--glass-highlight);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 18px 22px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: var(--glass-strong);
+            color: #fff;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 2px rgba(103, 232, 249, 0.25);
+        }
+
+        button {
+            position: relative;
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 20px;
+            border: none;
+            color: #0b1120;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            cursor: pointer;
+            box-shadow: 0 20px 40px rgba(168, 85, 247, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 30px 50px rgba(103, 232, 249, 0.35);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 15px 30px rgba(15, 23, 42, 0.3);
+        }
+
+        button.cancel {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            box-shadow: none;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        button.cancel:hover {
+            background: rgba(255, 255, 255, 0.35);
+            box-shadow: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Editar Nombre</h1>
+    <form action="">
+        <label for="nombre-input">Nombre</label>
+        <input type="text" id="nombre-input" name="nombre">
+        <div class="button-group">
+            <button type="submit">Guardar Cambios</button>
+            <button type="button" class="cancel" id="cancel-btn">Cancelar</button>
+        </div>
+    </form>
+
+    <script>
+        (() => {
+            const App = (() => {
+                const htmlElements = {
+                    form: document.querySelector('form'),
+                    input: document.querySelector('input'),
+                    cancelBtn: document.querySelector('#cancel-btn'),
+                };
+
+                const utils = {
+                    saveToLocalStorage(items) {
+                        localStorage.setItem('items', JSON.stringify(items));
+                    },
+                    getFromLocalStorage() {
+                        const items = localStorage.getItem('items');
+                        return items ? JSON.parse(items) : [];
+                    },
+                    getEditIndex() {
+                        return localStorage.getItem('editIndex');
+                    },
+                    redirectHome() {
+                        window.location.href = 'index.html';
+                    }
+                };
+
+                const handlers = {
+                    onFormSubmit(e) {
+                        e.preventDefault();
+                        const { value } = htmlElements.input;
+                        if (!value) return;
+
+                        const items = utils.getFromLocalStorage();
+                        const index = utils.getEditIndex();
+
+                        if (index !== null && items[index] !== undefined) {
+                            items[index] = value;
+                            utils.saveToLocalStorage(items);
+                            localStorage.removeItem('editIndex'); // Limpiar estado
+                            utils.redirectHome();
+                        } else {
+                            alert('Error: No se pudo encontrar el elemento a editar.');
+                            utils.redirectHome();
+                        }
+                    },
+                    onCancelClick() {
+                        localStorage.removeItem('editIndex');
+                        utils.redirectHome();
+                    }
+                };
+
+                return {
+                    init() {
+                        const index = utils.getEditIndex();
+                        const items = utils.getFromLocalStorage();
+
+                        if (index === null || items[index] === undefined) {
+                            alert('No hay elemento seleccionado para editar.');
+                            utils.redirectHome();
+                            return;
+                        }
+
+                        // Cargar valor actual
+                        htmlElements.input.value = items[index];
+
+                        // Event Listeners
+                        htmlElements.form.addEventListener('submit', handlers.onFormSubmit);
+                        htmlElements.cancelBtn.addEventListener('click', handlers.onCancelClick);
+                    }
+                }
+            })();
+            App.init();
+        })();
+    </script>
+</body>
+</html>
