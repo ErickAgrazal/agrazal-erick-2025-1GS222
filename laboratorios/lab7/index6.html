@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 20px;
+            color: #000;
+            min-height: 100vh;
+            font-weight: 900;
+        }
+
+        h1 {
+            color: #000;
+            text-align: center;
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            margin: 30px 0;
+            text-shadow: 8px 8px 0 #ffff00, -8px -8px 0 #00ff00;
+            line-height: 1.1;
+        }
+
+        form {
+            margin: 40px auto;
+            width: 100%;
+            max-width: 500px;
+            background: #ffff00;
+            border: 12px solid #000;
+            padding: 30px;
+            box-shadow: 16px 16px 0 #ff00ff, -16px -16px 0 #00ffff;
+        }
+
+        label {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            color: #000;
+            letter-spacing: 2px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.3rem;
+            font-weight: 900;
+            font-family: 'Courier New', monospace;
+            border: 8px solid #000;
+            background: #fff;
+            color: #000;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.1s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            background: #00ffff;
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0 #000;
+        }
+
+        button {
+            width: 100%;
+            padding: 25px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            background: #ff00ff;
+            color: #000;
+            border: 10px solid #000;
+            cursor: pointer;
+            letter-spacing: 3px;
+            transition: all 0.1s;
+            box-shadow: 8px 8px 0 #000;
+        }
+
+        button:hover {
+            transform: translate(-6px, -6px);
+            box-shadow: 12px 12px 0 #000;
+            background: #00ff00;
+        }
+
+        button:active {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        button.delete {
+            width: auto;
+            padding: 12px 20px;
+            font-size: 1rem;
+            background: #ff0000;
+            color: #fff;
+            border: 6px solid #000;
+            margin-left: 15px;
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        button.delete:hover {
+            background: #ff00ff;
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0 #000;
+        }
+
+        #counter {
+            margin: 40px auto;
+            max-width: 500px;
+            background: #00ffff;
+            border: 12px solid #000;
+            padding: 25px;
+            font-size: 1.8rem;
+            font-weight: 900;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 12px 12px 0 #ffff00;
+        }
+
+        #counter span {
+            display: block;
+            color: #000;
+        }
+
+        #response {
+            margin: 40px auto;
+            max-width: 500px;
+        }
+
+        #response p {
+            background: #fff;
+            border: 10px solid #000;
+            padding: 20px;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #000;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 8px 8px 0 #ff00ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #response p:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0 #ff00ff;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+                text-shadow: 4px 4px 0 #ffff00, -4px -4px 0 #00ff00;
+            }
+
+            form {
+                padding: 20px;
+                border-width: 8px;
+                box-shadow: 8px 8px 0 #ff00ff, -8px -8px 0 #00ffff;
+            }
+
+            input[type="text"], button {
+                font-size: 1.1rem;
+                padding: 15px;
+            }
+
+            #response p {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            button.delete {
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Ejemplo de JS</h1>
+    <form action="">
+        <label for="nombre-input">Nombre</label>
+        <input type="text" id="nombre-input" name="nombre">
+        <button type="submit">Enviar</button>
+    </form>
+    <div id="counter">0</div>
+    <div id="response"></div>
+    <script>
+        (() => {
+            const App = (() => {
+                const htmlElements = {
+                    form: document.querySelector('form'),
+                    response: document.querySelector('#response'),
+                    input: document.querySelector('input'),
+                    counter: document.querySelector('#counter'),
+                };
+
+                const templates = {
+                    row: (nombre) => `<p>Hola, ${nombre}<button class="delete">Eliminar</button></p>`,
+                    counter: (number) => `<span>La cantidad de elementos son ${number}.</span>`,
+                };
+
+                const utils = {
+                    attachDeleteButtons() {
+                        const buttons = htmlElements.response.querySelectorAll('.delete');
+                        buttons.forEach(button => button.addEventListener("click", handlers.onDeleteButtonClick));
+                        utils.saveToLocalStorage();
+                    },
+                    saveToLocalStorage() {
+                        localStorage.setItem('response', htmlElements.response.innerHTML);
+                    },
+                    getFromLocalStorage() {
+                        return localStorage.getItem('response');
+                    },
+                    renderResponse(children) {
+                        htmlElements.response.innerHTML = children;
+                    }
+                };
+
+                const handlers = {
+                    onDeleteButtonClick(e) {
+                        e.target.closest('p').remove();
+                        htmlElements.counter.innerHTML = templates.counter(htmlElements.response.children.length);
+                    },
+                    onFormSubmit(e) {
+                        e.preventDefault();
+                        const { value } = htmlElements.input;
+                        htmlElements.response.innerHTML += templates.row(value);
+                        utils.attachDeleteButtons();
+                        htmlElements.counter.innerHTML = templates.counter(htmlElements.response.children.length);
+                        utils.saveToLocalStorage();
+                    }
+                };
+
+                return {
+                    init() {
+                        htmlElements.form.addEventListener('submit', handlers.onFormSubmit);
+                        const pastChildren = utils.getFromLocalStorage();
+                        if (pastChildren) {
+                            utils.renderResponse(pastChildren);
+                            utils.attachDeleteButtons();
+                            htmlElements.counter.innerHTML = templates.counter(htmlElements.response.children.length);
+                        }
+                    }
+                }
+            })();
+            App.init();
+        })();
+
+
+        // const form = document.querySelector("form");
+        // const response = document.querySelector("#response");
+        // const input = document.querySelector("input");
+        // const counter = document.querySelector("#counter");
+        // function handleSubmit(e) {
+        //     e.preventDefault();
+        //     const nombre = input.value;
+        //     response.innerHTML += `<p>Hola, ${nombre}<button class="delete">Eliminar</button></p>`;
+        //     const buttons = response.querySelectorAll(".delete");
+        //     buttons.forEach(button => {
+        //         button.addEventListener("click", (e) => {
+        //             e.target.closest("p").remove();
+        //             counter.textContent = response.children.length;
+        //         });
+        //     });
+        //     counter.textContent = response.children.length;
+        // }
+        // form.addEventListener("submit", handleSubmit);
+    </script>
+</body>
+</html>

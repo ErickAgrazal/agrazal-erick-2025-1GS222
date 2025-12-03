@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test</title>
+</head>
+<body>
+  <h1>Hola</h1>
+  <script>
+    // Promise test
+    const promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject('Hola, desde dentro de la promesa!');
+      }, 2000);
+    });
+
+    console.log('Inicio del script');
+
+    // promise.then((data) => {
+    //   console.log(data);
+    // }).catch((error) => {
+    //   console.error('Error:', error);
+    // });
+
+    // async/await
+     const getData = async () => {
+      try {
+        const data = await promise;
+        console.log(data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    getData();
+
+    console.log('Fin del script');
+  </script>
+  <script>
+    // Pokemon API pikachu test
+    const fetchPokemon = async (pokemon) => {
+      try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchPokemon('pikachu');
+  </script>
+</body>
+</html>
